@@ -119,7 +119,7 @@ const id=logId("cluster",s,b),
 l=getLog(id,{date:workout.date,week:workout.week,key:workout.key,index:workout.index,exercise:e.name,kind:"cluster",number:s,block:b});
 html+=`<div class="cluster-block ${l.completed?"is-done":""}">
   <div class="cluster-block-top"><span>Bloco ${b}</span><span class="muted">${e.range} reps</span></div>
-  <div class="set-inputs"><div class="field"><label>KG</label><input class="input" data-log="${id}" data-field="weight" inputmode="decimal" value="${esc(l.weight)}"></div><div class="field"><label>REPS</label><input class="input" data-log="${id}" data-field="reps" inputmode="numeric" value="${esc(l.reps)}"></div></div>
+  <div class="set-inputs"><div class="field"><label>KG</label><input class="input" data-log="${id}" data-field="weight" ${b===1?`data-cluster-weight="${s}"`:`data-cluster-weight-target="${s}"`} inputmode="decimal" value="${esc(l.weight)}"></div><div class="field"><label>REPS</label><input class="input" data-log="${id}" data-field="reps" inputmode="numeric" value="${esc(l.reps)}"></div></div>
   <div class="set-actions">
     <button class="status-btn ${l.completed?"saved":"primary"}" data-complete="${id}">${l.completed?"✓ Salvo":"Registrar"}</button>
     ${l.completed&&b<3?`<button class="timer-btn" data-shortcut-rest="${state.clusterRest}">⏱️ Iniciar descanso · <b>${formatTime(state.clusterRest)}</b></button>`:""}
@@ -131,9 +131,39 @@ return html+`</div>`;
 }
 
 function bindSetEvents(){
-document.querySelectorAll("[data-log]").forEach(i=>i.onchange=()=>{
- const l=state.logs[i.dataset.log];
- if(l){l[i.dataset.field]=i.value;save();}
+document.querySelectorAll("[data-log]").forEach(i=>{
+  const saveInput=()=>{
+    const l=state.logs[i.dataset.log];
+    if(!l)return;
+    l[i.dataset.field]=i.value;
+
+    // Cluster: the three blocks use the same load. Typing the load in
+    // Block 1 immediately mirrors it to Blocks 2 and 3, while reps remain
+    // independent for each block.
+    if(i.dataset.field==="weight" && i.dataset.clusterWeight){
+      const parts=i.dataset.log.split("|");
+      if(parts.length===7){
+        for(let b=2;b<=3;b++){
+          const otherId=[...parts.slice(0,-1),String(b)].join("|");
+          const other=state.logs[otherId]||getLog(otherId,{
+            date:workout.date,week:workout.week,key:workout.key,index:workout.index,
+            exercise:l.exercise||"",kind:"cluster",number:Number(parts[5])||1,block:b
+          });
+          other.weight=i.value;
+        }
+      }
+    }
+    save();
+    if(i.dataset.clusterWeight){
+      document.querySelectorAll(`[data-cluster-weight-target="${i.dataset.clusterWeight}"]`).forEach(target=>{
+        if(target!==i)target.value=i.value;
+      });
+    }
+  };
+  i.oninput=()=>{
+    if(i.dataset.field==="weight" && i.dataset.clusterWeight)saveInput();
+  };
+  i.onchange=saveInput;
 });
 document.querySelectorAll("[data-complete]").forEach(b=>b.onclick=()=>{
  const l=state.logs[b.dataset.complete];
