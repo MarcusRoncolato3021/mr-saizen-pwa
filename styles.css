@@ -539,3 +539,32 @@ textarea{resize:vertical;min-height:90px}
 
 .cycle-complete{max-width:720px;margin:24px auto}
 .cycle-complete .h1{margin-bottom:8px}
+
+
+/* v11 — treino: barra de navegação fixa no rodapé do iPhone */
+.workout-page .wrap{
+  padding-bottom:calc(92px + var(--safe-bottom));
+}
+.workout-page .workout-footer{
+  position:fixed;
+  left:50%;
+  bottom:calc(8px + var(--safe-bottom));
+  transform:translateX(-50%);
+  width:calc(100% - 26px);
+  max-width:534px;
+  z-index:100;
+  margin:0;
+  padding:7px;
+  border:1px solid #282833;
+  border-radius:15px;
+  background:rgba(18,18,25,.97);
+  box-shadow:0 10px 32px rgba(0,0,0,.42);
+}
+.workout-page .workout-footer .btn{
+  flex:1;
+  width:100%;
+  min-height:46px;
+}
+@media(min-width:700px){
+  .workout-page .workout-footer{max-width:634px;width:calc(100% - 32px)}
+}
