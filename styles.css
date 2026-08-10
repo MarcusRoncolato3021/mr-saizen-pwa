@@ -608,3 +608,34 @@ body.workout-page > .workout-footer .btn{
 body.workout-page .wrap{
   padding-bottom:calc(125px + var(--safe-bottom)) !important;
 }
+
+/* v20 — viewport-fixed workout navigation.
+   Avoid transform/centering tricks that can behave inconsistently in iOS standalone mode. */
+html, body{
+  overflow-x:hidden;
+}
+body.workout-page > .workout-footer{
+  position:fixed !important;
+  top:auto !important;
+  left:13px !important;
+  right:13px !important;
+  bottom:calc(7px + env(safe-area-inset-bottom, 0px)) !important;
+  transform:none !important;
+  width:auto !important;
+  max-width:none !important;
+  margin:0 !important;
+  padding:7px !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  z-index:2147483647 !important;
+  pointer-events:auto !important;
+}
+body.workout-page > .workout-footer .btn{
+  flex:1 1 0 !important;
+  width:0 !important;
+  min-width:0 !important;
+  min-height:48px !important;
+}
+body.workout-page .wrap{
+  padding-bottom:calc(125px + env(safe-area-inset-bottom, 0px)) !important;
+}
