@@ -585,3 +585,45 @@ textarea{resize:vertical;min-height:90px}
     border-radius:16px;
   }
 }
+
+
+/* v12 — Próximo/Concluir: footer fora do container rolável.
+   O elemento é anexado diretamente ao body para evitar qualquer
+   containing block que possa fazer position:fixed acompanhar a rolagem. */
+body.workout-page > .workout-footer{
+  position:fixed !important;
+  left:50% !important;
+  right:auto !important;
+  bottom:calc(8px + var(--safe-bottom)) !important;
+  transform:translate3d(-50%,0,0) !important;
+  width:calc(100vw - 26px) !important;
+  max-width:560px !important;
+  margin:0 !important;
+  padding:7px !important;
+  display:flex !important;
+  gap:8px !important;
+  z-index:2147483647 !important;
+  border:1px solid #282833 !important;
+  border-radius:16px !important;
+  background:rgba(18,18,25,.97) !important;
+  box-shadow:0 10px 32px rgba(0,0,0,.42) !important;
+  backdrop-filter:blur(18px) !important;
+  -webkit-backdrop-filter:blur(18px) !important;
+}
+
+body.workout-page > .workout-footer .btn{
+  flex:1 1 100% !important;
+  width:100% !important;
+  min-height:48px !important;
+}
+
+body.workout-page .wrap{
+  padding-bottom:calc(125px + var(--safe-bottom)) !important;
+}
+
+@media (max-width:600px){
+  body.workout-page > .workout-footer{
+    width:calc(100vw - 26px) !important;
+    bottom:calc(7px + var(--safe-bottom)) !important;
+  }
+}
