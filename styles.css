@@ -537,34 +537,42 @@ textarea{resize:vertical;min-height:90px}
   border-color:rgba(255,45,141,.72) !important;
 }
 
+/* v11 — workout navigation stays fixed to the viewport.
+   The previous implementation used position: sticky, which made
+   the button move with the page on iPhone/PWA. */
+.workout-page .workout-footer{
+  position:fixed !important;
+  left:50% !important;
+  bottom:calc(8px + var(--safe-bottom)) !important;
+  transform:translateX(-50%) !important;
+  width:min(calc(100vw - 28px), 560px) !important;
+  margin:0 !important;
+  z-index:100 !important;
+  padding:6px !important;
+  border-radius:16px !important;
+  background:rgba(18,18,25,.97) !important;
+  backdrop-filter:blur(18px) !important;
+  -webkit-backdrop-filter:blur(18px) !important;
+  box-shadow:0 10px 30px rgba(0,0,0,.38) !important;
+}
+
+.workout-page .workout-footer .btn{
+  width:100% !important;
+  flex:1 1 100% !important;
+  min-height:48px !important;
+}
+
+/* Space for the fixed footer so the final fields are never hidden behind it. */
+.workout-page .wrap{
+  padding-bottom:calc(112px + var(--safe-bottom)) !important;
+}
+
+@media(max-width:600px){
+  .workout-page .workout-footer{
+    width:calc(100vw - 26px) !important;
+    bottom:calc(7px + var(--safe-bottom)) !important;
+  }
+}
+
 .cycle-complete{max-width:720px;margin:24px auto}
 .cycle-complete .h1{margin-bottom:8px}
-
-
-/* v11 — treino: barra de navegação fixa no rodapé do iPhone */
-.workout-page .wrap{
-  padding-bottom:calc(92px + var(--safe-bottom));
-}
-.workout-page .workout-footer{
-  position:fixed;
-  left:50%;
-  bottom:calc(8px + var(--safe-bottom));
-  transform:translateX(-50%);
-  width:calc(100% - 26px);
-  max-width:534px;
-  z-index:100;
-  margin:0;
-  padding:7px;
-  border:1px solid #282833;
-  border-radius:15px;
-  background:rgba(18,18,25,.97);
-  box-shadow:0 10px 32px rgba(0,0,0,.42);
-}
-.workout-page .workout-footer .btn{
-  flex:1;
-  width:100%;
-  min-height:46px;
-}
-@media(min-width:700px){
-  .workout-page .workout-footer{max-width:634px;width:calc(100% - 32px)}
-}
