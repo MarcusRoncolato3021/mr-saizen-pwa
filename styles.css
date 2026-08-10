@@ -1,0 +1,541 @@
+
+:root{
+  --bg:#09090d;
+  --surface:#121219;
+  --surface-2:#171720;
+  --surface-3:#1d1d27;
+  --line:#292936;
+  --text:#f7f7fa;
+  --muted:#9a9aa7;
+  --pink:#ff2d8d;
+  --pink-soft:#ff5ca5;
+  --green:#3bd69b;
+  --safe-bottom:env(safe-area-inset-bottom, 0px);
+  --safe-top:env(safe-area-inset-top, 0px);
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -15%,rgba(255,45,141,.08),transparent 32%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+button,input,textarea{font:inherit}
+button{touch-action:manipulation}
+.boot{padding:48px 20px;text-align:center;color:var(--muted)}
+.wrap{
+  width:100%;
+  max-width:560px;
+  margin:0 auto;
+  padding:calc(14px + var(--safe-top)) 14px calc(96px + var(--safe-bottom));
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin:0 2px 14px;
+  min-height:42px;
+}
+.brand{font-size:14px;font-weight:900;letter-spacing:.16em}
+.sub{color:var(--muted);font-size:12px;margin-top:3px}
+.muted{color:var(--muted);font-size:13px}
+.eyebrow{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--pink-soft);
+  font-weight:900;
+}
+.h1{font-size:28px;line-height:1.05;font-weight:900;margin:7px 0}
+.h2{font-size:17px;line-height:1.15;font-weight:850}
+.section{margin:22px 3px 9px}
+.grid{display:grid;gap:9px}
+.card{
+  background:linear-gradient(145deg,var(--surface-2),var(--surface));
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:14px;
+  margin-bottom:9px;
+}
+.hero{
+  background:linear-gradient(145deg,#171720,#101016);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:17px;
+  margin-bottom:12px;
+}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.btn{
+  min-height:42px;
+  border:0;
+  border-radius:13px;
+  background:var(--pink);
+  color:#fff;
+  padding:10px 15px;
+  font-weight:850;
+  cursor:pointer;
+  box-shadow:none;
+}
+.btn:active{transform:scale(.98)}
+.btn.secondary{background:var(--surface-3);color:#f1f1f5}
+.btn.small{min-height:36px;padding:8px 12px;font-size:12px;border-radius:11px}
+.weekbar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:15px}
+.day{
+  min-width:0;
+  font-size:10px;
+  line-height:1.25;
+  text-align:center;
+  color:#8f8f9a;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:7px 2px;
+}
+.day.active{border-color:var(--pink);color:#fff;background:rgba(255,45,141,.10)}
+.day.rest{opacity:.38}
+.last{
+  border:1px solid #3a2733;
+  background:rgba(255,45,141,.055);
+  border-radius:15px;
+  padding:11px 13px;
+  margin-bottom:9px;
+}
+.pill{
+  font-size:10px;
+  line-height:1;
+  font-weight:850;
+  padding:7px 8px;
+  border-radius:999px;
+  background:#292934;
+  color:#ddd;
+  white-space:nowrap;
+}
+.pill.cluster{background:#30203a;color:#e5b6ff}
+.pill.straight{background:#1c332e;color:#b4eadb}
+.exercise{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.exercise:last-child{border-bottom:0}
+.exercise-name{font-weight:800}
+.exercise-meta{font-size:12px;color:#999;margin-top:3px}
+.notice{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  border-radius:13px;
+  padding:10px 12px;
+  color:#9f9faa;
+  font-size:11px;
+  line-height:1.35;
+}
+.empty{text-align:center;color:#999;padding:28px}
+.setcard{
+  background:#0f0f15;
+  border:1px solid #272732;
+  border-radius:15px;
+  padding:12px;
+  margin-top:9px;
+}
+.setcard.done{border-color:#316451;background:#101814}
+.sethead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.settitle{font-weight:850;font-size:15px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.field label{display:block;font-size:10px;color:#8f8f9a;margin:0 0 4px 1px}
+.input,textarea{
+  width:100%;
+  background:#08080c;
+  color:#fff;
+  border:1px solid #30303b;
+  border-radius:11px;
+  padding:11px 12px;
+  outline:none;
+}
+.input{height:45px;font-size:17px;font-weight:700}
+.input:focus,textarea:focus{border-color:var(--pink)}
+.check{width:100%;margin-top:8px}
+.shortcut-rest{width:100%;margin-top:7px}
+.stack>*+*{margin-top:11px}
+textarea{resize:vertical;min-height:90px}
+.nav{
+  position:fixed;
+  left:0;right:0;bottom:0;
+  padding-bottom:var(--safe-bottom);
+  background:rgba(9,9,13,.92);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-top:1px solid rgba(255,255,255,.08);
+  z-index:50;
+}
+.navin{max-width:560px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)}
+.nav button{
+  background:none;
+  border:0;
+  color:#777783;
+  min-height:58px;
+  padding:7px 4px 5px;
+  font-size:17px;
+  cursor:pointer;
+}
+.nav button.active{color:#fff}
+.nav span{display:block;font-size:10px;margin-top:2px;font-weight:700}
+.workout-page .wrap{padding-bottom:calc(86px + var(--safe-bottom))}
+.workout-page .nav{display:none}
+.workout-page .top{position:sticky;top:0;z-index:20;margin:calc(-14px - var(--safe-top)) -14px 10px;padding:calc(10px + var(--safe-top)) 14px 9px;background:rgba(9,9,13,.90);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.06)}
+.workout-head{
+  position:sticky;
+  top:58px;
+  z-index:15;
+  background:rgba(9,9,13,.96);
+  margin:0 -2px 10px;
+  padding:8px 2px 10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.workout-head .h1{font-size:24px;margin:4px 0}
+.workout-progress{font-size:11px;color:var(--muted);font-weight:700}
+.workout-exercise{margin-bottom:9px}
+.workout-exercise .exercise-main{min-width:0}
+.workout-exercise .exercise-main .h2{font-size:20px}
+.prep-card{padding:10px}
+.prep-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.prep-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.work-card{padding:10px}
+.work-card .notice{margin:7px 0 8px}
+.workout-footer{
+  position:sticky;
+  bottom:calc(8px + var(--safe-bottom));
+  z-index:18;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px;
+  margin:12px -2px 0;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(18,18,25,.94);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.workout-footer .btn{flex:1}
+@media(max-width:380px){
+  .wrap{padding-left:11px;padding-right:11px}
+  .h1{font-size:25px}
+  .workout-exercise .exercise-main .h2{font-size:18px}
+  .btn{padding-left:12px;padding-right:12px}
+}
+@media(min-width:700px){
+  .wrap{padding-top:28px}
+  .grid{grid-template-columns:1fr 1fr}
+  .workout-page .nav{display:none}
+  .workout-page .wrap{max-width:650px}
+}
+
+/* v2 compact workout UI */
+.exercise-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:16px;
+  padding:12px 13px;margin-bottom:9px;
+}
+.exercise-main{min-width:0}
+.exercise-main .h2{font-size:19px;line-height:1.08}
+.compact-last{display:flex;align-items:center;padding:10px 12px}
+.compact-last strong{display:block;margin-top:2px;font-size:14px}
+.compact-section{
+  background:linear-gradient(145deg,var(--surface-2),var(--surface));
+  border:1px solid var(--line);border-radius:16px;padding:10px;margin-bottom:9px;
+}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+.section-head .muted{font-size:10px}
+.compact-set{
+  background:#0e0e14;border:1px solid #292934;border-radius:13px;
+  padding:9px;margin-top:7px;
+}
+.compact-set.done,.cluster-row.done{border-color:#316451;background:#0f1713}
+.compact-set-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.compact-fields{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}
+.compact-fields .input{height:42px;padding:8px 10px;font-size:16px}
+.compact-actions{display:grid;grid-template-columns:1fr auto;gap:7px;margin-top:7px}
+.compact-actions .btn{min-height:39px}
+.compact-actions .shortcut-rest{min-width:88px}
+.compact-notice{margin:0 0 7px;font-size:10px;padding:8px 10px}
+.cluster-work{margin-top:7px}
+.cluster-row{background:#0e0e14;border:1px solid #292934;border-radius:13px;padding:9px;margin-top:7px}
+.cluster-label{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.note-section textarea{min-height:64px}
+.workout-footer{
+  position:sticky;
+  bottom:calc(8px + var(--safe-bottom));
+  z-index:18;
+  display:flex;gap:7px;
+  padding:7px;
+  margin:8px -2px calc(8px + var(--safe-bottom));
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:rgba(18,18,25,.96);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 10px 30px rgba(0,0,0,.30);
+}
+.workout-footer .btn{flex:1;min-height:43px}
+.workout-page .wrap{padding-bottom:calc(80px + var(--safe-bottom))}
+@media(max-width:600px){
+  .prep-grid{display:block}
+  .compact-set-head .pill{font-size:9px;padding:6px 7px}
+}
+@media(max-width:380px){
+  .exercise-main .h2{font-size:17px}
+  .compact-actions{grid-template-columns:1fr}
+  .compact-actions .shortcut-rest{width:100%}
+}
+
+.compact-set.done .input,.cluster-row.done .input{opacity:1;color:#fff;cursor:text}
+.compact-set.done .input:focus,.cluster-row.done .input:focus{border-color:var(--pink)}
+
+.shortcut-rest{
+  border:1px solid rgba(255,45,141,.45)!important;
+  color:#fff!important;
+  font-weight:900!important;
+}
+.compact-actions .shortcut-rest{min-width:0}
+
+/* v5: cleaner saved-state actions + previous-session notes */
+.compact-actions{
+  display:grid;
+  grid-template-columns:112px minmax(0,1fr);
+  gap:7px;
+  margin-top:7px;
+}
+.compact-actions .check{
+  min-width:0;
+  white-space:nowrap;
+  font-size:12px;
+  padding-left:8px;
+  padding-right:8px;
+}
+.compact-actions .shortcut-rest{
+  min-width:0;
+  white-space:nowrap;
+  font-size:12px;
+  border:1px solid rgba(255,45,141,.45)!important;
+}
+.previous-note{
+  border:1px solid rgba(255,45,141,.28);
+  background:linear-gradient(145deg,rgba(255,45,141,.10),rgba(255,45,141,.035));
+  border-radius:15px;
+  padding:11px 13px;
+  margin:0 0 9px;
+}
+.previous-note-text{
+  margin-top:5px;
+  font-size:14px;
+  line-height:1.4;
+  color:#f0dbe6;
+  white-space:pre-wrap;
+}
+@media(max-width:380px){
+  .compact-actions{grid-template-columns:102px minmax(0,1fr)}
+  .compact-actions .check,.compact-actions .shortcut-rest{font-size:11px}
+}
+
+/* v6 — mobile-first workout redesign */
+.workout-page{background:#09090d}
+.workout-page .wrap{max-width:560px;padding-left:16px;padding-right:16px}
+.workout-page .top{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}
+.workout-head{position:static;border-bottom:0;padding:5px 0 13px;margin:0}
+.workout-title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.workout-head .h1{font-size:30px;letter-spacing:-.02em;margin:4px 0 0}
+.workout-progress{font-size:12px;color:#8f8f9b;font-weight:700;margin-top:2px}
+.exercise-strip{
+ display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:13px 0;border-top:1px solid #24242e;border-bottom:1px solid #24242e;
+}
+.exercise-title{font-size:20px;font-weight:900;line-height:1.1}
+.exercise-sub{font-size:12px;color:#8f8f9b;margin-top:4px}
+.edit-link{border:0;background:none;color:#ff5ca5;font-size:12px;font-weight:900;padding:8px 0}
+.last-line{
+ display:flex;align-items:center;justify-content:space-between;gap:10px;
+ padding:10px 1px;color:#8f8f9b;font-size:11px;border-bottom:1px solid #1f1f28;
+}
+.last-line strong{color:#f5f5f7;font-size:12px;text-align:right}
+.prep-section,.work-section{margin-top:15px}
+.section-line{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.section-title{font-size:16px;font-weight:900;letter-spacing:-.01em}
+.section-line>span:not(.method-label){font-size:10px;color:#777783}
+.method-label{font-size:9px;font-weight:900;letter-spacing:.08em;padding:6px 8px;border-radius:999px}
+.method-label.straight{background:#1c332e;color:#b4eadb}
+.method-label.cluster{background:#30203a;color:#e5b6ff}
+.set-row,.cluster-set{
+ background:#101016;border:1px solid #282833;border-radius:15px;padding:11px;margin-top:7px;
+}
+.set-row.is-done,.cluster-block.is-done{border-color:#2e604e;background:#101713}
+.set-row-top,.cluster-head,.cluster-block-top{
+ display:flex;align-items:center;justify-content:space-between;gap:8px
+}
+.set-name{font-size:15px;font-weight:900}
+.set-inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.field label{font-size:9px;font-weight:800;color:#777783;display:block;margin:0 0 4px 2px}
+.set-inputs .input{height:44px;font-size:17px;font-weight:800;padding:8px 10px}
+.set-actions{display:grid;grid-template-columns:105px minmax(0,1fr);gap:7px;margin-top:8px}
+.status-btn,.timer-btn{
+ border:0;border-radius:11px;min-height:40px;padding:8px 9px;font-weight:900;cursor:pointer;
+}
+.status-btn.primary{background:var(--pink);color:#fff}
+.status-btn.saved{background:#20202a;color:#fff}
+.timer-btn{
+ background:#191921;color:#fff;border:1px solid rgba(255,45,141,.55);
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.timer-btn b{font-weight:900}
+.cluster-block{border-top:1px solid #24242e;padding:9px 0 0;margin-top:8px}
+.cluster-block:first-of-type{border-top:0;margin-top:6px;padding-top:0}
+.cluster-block-top span:first-child{font-weight:850;font-size:12px}
+.rest-rule{font-size:10px;color:#777783;padding:7px 0;border-top:1px solid #20202a;border-bottom:1px solid #20202a}
+.previous-note{
+ margin-top:15px;border-left:3px solid var(--pink);border-radius:0 12px 12px 0;
+ padding:10px 12px;background:rgba(255,45,141,.055);border-top:0;border-right:0;border-bottom:0;
+}
+.previous-note .eyebrow{font-size:9px}
+.previous-note-text{font-size:13px;line-height:1.4;color:#eee;margin-top:4px}
+.today-note{margin-top:15px}
+.today-note .section-title{margin-bottom:7px}
+.today-note .input{min-height:68px;border-radius:12px;font-size:13px;padding:10px 11px}
+.workout-footer{
+ position:sticky;bottom:calc(7px + var(--safe-bottom));z-index:18;
+ display:flex;gap:7px;padding:6px;margin:15px 0 0;
+ border:1px solid #282833;border-radius:14px;background:rgba(18,18,25,.96);
+ box-shadow:0 8px 28px rgba(0,0,0,.28)
+}
+.workout-footer .btn{min-height:44px}
+@media(max-width:380px){
+ .workout-page .wrap{padding-left:13px;padding-right:13px}
+ .workout-page .top{margin-left:-13px;margin-right:-13px;padding-left:13px;padding-right:13px}
+ .workout-head .h1{font-size:27px}
+ .exercise-title{font-size:18px}
+ .set-actions{grid-template-columns:92px minmax(0,1fr)}
+ .status-btn,.timer-btn{font-size:11px}
+}
+
+/* v7 — full-width action buttons */
+.compact-set .compact-actions{
+  display:block;
+  margin-top:8px;
+}
+.compact-set .compact-actions .check{
+  width:100%;
+  min-width:0;
+  min-height:46px;
+  border-radius:12px;
+}
+.compact-set .compact-actions .shortcut-rest{
+  width:100%;
+  min-width:0;
+  min-height:46px;
+  margin-top:7px;
+  border-radius:12px;
+}
+.compact-set:not(.done) .compact-actions .check{
+  width:100%;
+}
+.cluster-row .compact-actions{
+  display:block;
+}
+.cluster-row .compact-actions .check{
+  width:100%;
+  min-height:44px;
+}
+.cluster-row .compact-actions .shortcut-rest{
+  width:100%;
+  min-height:44px;
+  margin-top:7px;
+}
+
+/* v8 — preparation buttons: full-width, centered */
+.compact-set:not(.done) .compact-actions{
+  display:block;
+  width:100%;
+}
+.compact-set:not(.done) .compact-actions .check{
+  display:block;
+  width:100%;
+  min-height:48px;
+  margin:0;
+  text-align:center;
+  border-radius:12px;
+}
+
+/* Saved work-set state: full-width status + full-width timer action */
+.compact-set.done .compact-actions{
+  display:block;
+  width:100%;
+}
+.compact-set.done .compact-actions .check{
+  display:block;
+  width:100%;
+  min-height:46px;
+  margin:0;
+  text-align:center;
+}
+.compact-set.done .compact-actions .shortcut-rest{
+  display:block;
+  width:100%;
+  min-height:48px;
+  margin:7px 0 0;
+  text-align:center;
+}
+
+/* Cluster follows the same touch-friendly pattern */
+.cluster-row .compact-actions{
+  display:block;
+  width:100%;
+}
+.cluster-row .compact-actions .check,
+.cluster-row .compact-actions .shortcut-rest{
+  display:block;
+  width:100%;
+  min-height:46px;
+  margin:0;
+  text-align:center;
+}
+.cluster-row .compact-actions .shortcut-rest{
+  margin-top:7px;
+}
+
+/* v9 — actual action classes used by the workout renderer */
+.set-actions{
+  display:flex !important;
+  flex-direction:column !important;
+  width:100% !important;
+  gap:8px !important;
+  margin-top:10px !important;
+  align-items:stretch !important;
+}
+.set-actions .status-btn,
+.set-actions .timer-btn{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  width:100% !important;
+  max-width:none !important;
+  min-height:48px !important;
+  margin:0 !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+}
+.set-actions .status-btn{
+  padding-left:14px !important;
+  padding-right:14px !important;
+}
+.set-actions .timer-btn{
+  padding-left:14px !important;
+  padding-right:14px !important;
+}
+
+/* v10 — final cluster block gets the normal 2-minute rest action */
+.cluster-final-rest{
+  border-color:rgba(255,45,141,.72) !important;
+}
+
+.cycle-complete{max-width:720px;margin:24px auto}
+.cycle-complete .h1{margin-bottom:8px}
