@@ -34,23 +34,7 @@ function workoutMethod(week,key,i){const day=Object.keys(PROGRAM[week].days).fin
 function exercisesFor(week,key){return BASE[key].map((x,i)=>({name:state.edits?.[week]?.[key]?.[i]?.name||x[0],range:x[1],method:workoutMethod(week,key,i),sets:SETS[week][key][i]}));}
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function pill(m){return `<span class="pill ${m}">${m==="cluster"?"CLUSTER":"STRAIGHT"}</span>`;}
-function layout(content){
-document.body.className=route==="workout"?"workout-page":"";
-document.querySelectorAll("body > .workout-footer").forEach(el=>el.remove());
-
-let footerHtml="";
-if(route==="workout"){
-  const m=content.match(/<div class="workout-footer">[\\s\\S]*?<\\/div>/);
-  if(m){ footerHtml=m[0]; content=content.replace(m[0],""); }
-}
-
-app.innerHTML=`<div class="wrap"><header class="top"><div><div class="brand">MR. SAIZEN METHOD</div><div class="sub">${route==="workout"?"Treino em andamento":"Diário de treino · 7 semanas"}</div></div>${route==="workout"?'<button class="btn secondary small" id="exit">Sair</button>':""}</header>${content}</div>${nav()}`;
-
-if(footerHtml) document.body.insertAdjacentHTML("beforeend", footerHtml);
-
-const ex=document.getElementById("exit");
-if(ex)ex.onclick=()=>go("home");
-}
+function layout(content){document.body.className=route==="workout"?"workout-page":"";app.innerHTML=`<div class="wrap"><header class="top"><div><div class="brand">MR. SAIZEN METHOD</div><div class="sub">${route==="workout"?"Treino em andamento":"Diário de treino · 7 semanas"}</div></div>${route==="workout"?'<button class="btn secondary small" id="exit">Sair</button>':""}</header>${content}</div>${nav()}`;const ex=document.getElementById("exit");if(ex)ex.onclick=()=>go("home");}
 function nav(){return `<nav class="nav"><div class="navin"><button class="${route==="home"?"active":""}" data-nav="home">🏠<br><span>Início</span></button><button class="${route==="history"?"active":""}" data-nav="history">📊<br><span>Histórico</span></button><button class="${route==="settings"?"active":""}" data-nav="settings">⚙️<br><span>Config.</span></button></div></nav>`;}
 function bindNav(){document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>go(b.dataset.nav));}
 function go(r){route=r;render();}
@@ -230,6 +214,8 @@ ${previousNote?`<section class="previous-note"><div class="eyebrow">NOTA DA ÚLT
 <div class="workout-footer">${workout.index>0?'<button class="btn secondary" id="prev">← Anterior</button>':''}${workout.index<exs.length-1?'<button class="btn" id="next">Próximo →</button>':'<button class="btn" id="finish">✓ Concluir</button>'}</div>`;
 
 layout(html);
+const workoutFooter=document.querySelector(".workout-footer");
+if(workoutFooter) document.body.appendChild(workoutFooter);
 document.getElementById("editEx").onclick=()=>{
 const n=prompt("Nome do exercício",e.name);
 if(n&&n.trim()){state.edits[workout.week]??={};state.edits[workout.week][workout.key]??={};state.edits[workout.week][workout.key][workout.index]={name:n.trim()};save();renderWorkout();}
