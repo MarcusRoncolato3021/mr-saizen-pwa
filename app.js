@@ -256,11 +256,6 @@ ${previousNote?`<section class="previous-note"><div class="eyebrow">NOTA DA ÚLT
 <div class="workout-footer">${workout.index>0?'<button class="btn secondary" id="prev">← Anterior</button>':''}${workout.index<exs.length-1?'<button class="btn" id="next">Próximo →</button>':'<button class="btn" id="finish">✓ Concluir</button>'}</div>`;
 
 layout(html);
-const workoutFooter=document.querySelector(".workout-footer");
-if(workoutFooter){
-  document.body.appendChild(workoutFooter);
-  lockWorkoutFooter(workoutFooter);
-}
 document.getElementById("editEx").onclick=()=>{
 const n=prompt("Nome do exercício",e.name);
 if(n&&n.trim()){state.edits[workout.week]??={};state.edits[workout.week][workout.key]??={};state.edits[workout.week][workout.key][workout.index]={name:n.trim()};save();renderWorkout();}
