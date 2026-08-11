@@ -176,6 +176,48 @@ document.querySelectorAll("[data-complete]").forEach(b=>b.onclick=()=>{
 document.querySelectorAll("[data-shortcut-rest]").forEach(b=>b.onclick=()=>openShortcut(Number(b.dataset.shortcutRest)));
 }
 function lastSession(name,before){const arr=Object.values(state.logs).filter(l=>l.exercise===name&&l.kind==="work"&&l.date<before&&l.reps!=="").sort((a,b)=>b.date.localeCompare(a.date)||(b.number||0)-(a.number||0));if(!arr.length)return null;const d=arr[0].date,same=arr.filter(x=>x.date===d&&x.exercise===name).sort((a,b)=>(a.number||0)-(b.number||0));return {summary:same.map(x=>`${x.weight||"—"} kg × ${x.reps||"—"}`).join(" · ")};}
+let workoutFooterLockCleanup=null;
+function lockWorkoutFooter(el){
+  if(workoutFooterLockCleanup) workoutFooterLockCleanup();
+  const getScroller=()=>document.scrollingElement||document.documentElement;
+  const update=()=>{
+    if(!document.body.classList.contains("workout-page")||!document.body.contains(el)) return;
+    const sc=getScroller();
+    const vv=window.visualViewport;
+    const scrollY=sc.scrollTop||window.pageYOffset||0;
+    const viewportH=vv?vv.height:window.innerHeight;
+    const safeBottom=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--safe-bottom"))||0;
+    const h=el.offsetHeight;
+    const top=scrollY+viewportH-h-safeBottom-7;
+    el.style.position="absolute";
+    el.style.top=Math.max(0,top)+"px";
+    el.style.bottom="auto";
+    el.style.left="13px";
+    el.style.right="13px";
+    el.style.transform="none";
+  };
+  update();
+  const sc=getScroller();
+  const events=[];
+  const onScroll=()=>requestAnimationFrame(update);
+  const onResize=()=>requestAnimationFrame(update);
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("resize",onResize,{passive:true});
+  if(window.visualViewport){
+    window.visualViewport.addEventListener("resize",onResize,{passive:true});
+    window.visualViewport.addEventListener("scroll",onResize,{passive:true});
+  }
+  workoutFooterLockCleanup=()=>{
+    window.removeEventListener("scroll",onScroll);
+    window.removeEventListener("resize",onResize);
+    if(window.visualViewport){
+      window.visualViewport.removeEventListener("resize",onResize);
+      window.visualViewport.removeEventListener("scroll",onResize);
+    }
+    workoutFooterLockCleanup=null;
+  };
+}
+
 function renderWorkout(){
 const e=exercisesFor(workout.week,workout.key)[workout.index],
 exs=exercisesFor(workout.week,workout.key),
@@ -215,7 +257,10 @@ ${previousNote?`<section class="previous-note"><div class="eyebrow">NOTA DA ÚLT
 
 layout(html);
 const workoutFooter=document.querySelector(".workout-footer");
-if(workoutFooter) document.body.appendChild(workoutFooter);
+if(workoutFooter){
+  document.body.appendChild(workoutFooter);
+  lockWorkoutFooter(workoutFooter);
+}
 document.getElementById("editEx").onclick=()=>{
 const n=prompt("Nome do exercício",e.name);
 if(n&&n.trim()){state.edits[workout.week]??={};state.edits[workout.week][workout.key]??={};state.edits[workout.week][workout.key][workout.index]={name:n.trim()};save();renderWorkout();}

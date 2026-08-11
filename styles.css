@@ -639,3 +639,15 @@ body.workout-page > .workout-footer .btn{
 body.workout-page .wrap{
   padding-bottom:calc(125px + env(safe-area-inset-bottom, 0px)) !important;
 }
+
+/* v21 — iOS fallback: JS positions the footer in document coordinates so it
+   remains visually locked to the viewport even when standalone Safari handles
+   fixed-position elements inconsistently. */
+body.workout-page > .workout-footer{
+  position:absolute !important;
+  left:13px !important;
+  right:13px !important;
+  bottom:auto !important;
+  transform:none !important;
+  z-index:2147483647 !important;
+}
