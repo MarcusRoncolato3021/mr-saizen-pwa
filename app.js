@@ -77,7 +77,7 @@ function openIOSShortcutTimer(seconds){
 function renderHome(){const info=weekInfo(), p=PROGRAM[info.week], start=localDate(state.startDate), ws=new Date(start);ws.setDate(start.getDate()+(info.week-1)*7);const we=new Date(ws);we.setDate(ws.getDate()+6);let cards="";for(const d of DAYS){const dt=new Date(ws);dt.setDate(ws.getDate()+(d===1?0:d===2?1:d===4?3:4));const key=p.days[d], id=`${dateISO(dt)}|${info.week}|${key}`, done=!!state.completed[id];cards+=`<div class="card"><div class="row"><div><div class="h2">${LABEL[key]}</div><div class="muted">${DAYNAMES[d]} · ${fmt(dateISO(dt))} · ${d<=2?"Straight":"Cluster"}</div></div><button class="btn small" data-open="${info.week}|${key}|${dateISO(dt)}">${done?"Revisar":"Abrir"}</button></div></div>`;}
 const todayKey=workoutForDate(new Date());layout(`<section class="hero"><div class="eyebrow">Ciclo ${state.cycle}</div><div class="h1">Semana ${info.week} — ${p.name}</div><div class="muted">${fmt(dateISO(ws))} → ${fmt(dateISO(we))}</div><p class="muted">${p.note}</p><div class="weekbar">${[0,1,2,3,4,5,6].map(i=>{const d=new Date(ws);d.setDate(ws.getDate()+i);const dow=d.getDay();return `<div class="day ${dateISO(d)===todayISO()?"active":""} ${!p.days[dow]?"rest":""}">${DAYNAMES[dow]}<br>${d.getDate()}</div>`;}).join("")}</div></section><div class="section eyebrow">Treinos da semana</div><div class="grid">${cards}</div>${todayKey?`<div class="section eyebrow">Hoje</div><div class="card"><div class="row"><div><div class="h2">${LABEL[todayKey]}</div><div class="muted">Treino programado para hoje</div></div><div class="row-actions"><button class="btn secondary small" data-overview="${info.week}|${todayKey}|${todayISO()}">📋 Ver treino completo</button><button class="btn small" data-open="${info.week}|${todayKey}|${todayISO()}">Iniciar</button></div></div></div>`:""}`);document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.open.split("|");startWorkout(Number(w),k,d);});
 document.querySelectorAll("[data-overview]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.overview.split("|");workout={week:Number(w),key:k,date:d,index:0};route="overview";renderOverview();});}
-function startWorkout(week,key,date){workout={week,key,date,index:0};route="workout";renderWorkout();bindNav();}
+function startWorkout(week,key,date){workout={week,key,date,index:0};route="overview";renderOverview();bindNav();}
 function noteKey(){return `${workout.date}|${workout.week}|${workout.key}|${workout.index}`;}
 function logId(kind,number,block=0){return `${workout.date}|${workout.week}|${workout.key}|${workout.index}|${kind}|${number}|${block}`;}
 function exerciseNoteKey(){return `${workout.key}|${workout.index}`;}
@@ -114,7 +114,7 @@ function getLog(id,defaults){
  }
  return state.logs[id];
 }
-function singleSet(e,kind,number,min,max){
+function singleSet(e,kind,number,min,max,isFinalWork=false){
 const id=logId(kind,number),
 l=getLog(id,{date:workout.date,week:workout.week,key:workout.key,index:workout.index,exercise:e.name,kind,number}),
 title=kind==="warmup"?"Aquecimento":kind==="feeder"?"Feeder":`Work set ${number}`,
@@ -131,7 +131,7 @@ return `<div class="set-row ${l.completed?"is-done":""}">
   </div>
   <div class="set-actions">
     <button class="status-btn ${l.completed?"saved":"primary"}" data-complete="${id}">${l.completed?"✓ Salvo":"Registrar"}</button>
-    ${isWork&&l.completed?`<button class="timer-btn" data-shortcut-rest="${state.restStraight}">⏱️ Iniciar descanso · <b>${formatTime(state.restStraight)}</b></button>`:""}
+    ${isWork&&isFinalWork&&l.completed?`<button class="timer-btn auto-next-rest" data-shortcut-rest="${state.restStraight}" data-auto-next="true">⏱️ Iniciar descanso · <b>${formatTime(state.restStraight)}</b></button>`:""}
   </div>
 </div>`;
 }
@@ -328,7 +328,7 @@ let html=`<section class="workout-head">
 <section class="work-section">
   <div class="section-line"><div class="section-title">Work sets</div><span class="method-label ${e.method==="cluster"?"cluster":"straight"}">${e.method==="cluster"?"CLUSTER":"STRAIGHT"}</span></div>
   <div class="rest-rule">Descanso manual · ${e.method==="cluster"?`${state.clusterRest}s entre blocos`:`${formatTime(state.restStraight)} entre sets`}</div>`;
-for(let s=1;s<=e.sets;s++) html+=e.method==="cluster"?clusterSet(e,s):singleSet(e,"work",s,p[0],p[1]);
+for(let s=1;s<=e.sets;s++) html+=e.method==="cluster"?clusterSet(e,s):singleSet(e,"work",s,p[0],p[1],s===e.sets);
 html+=`</section>
 
 ${previousNote?`<section class="previous-note"><div class="eyebrow">NOTA DA ÚLTIMA SESSÃO · ${fmt(previousNote.date)}</div><div class="previous-note-text">${esc(previousNote.v)}</div></section>`:""}
@@ -355,9 +355,57 @@ if(finish)finish.onclick=()=>{
  save();go("home");
 };
 bindSetEvents();
+document.querySelectorAll("[data-auto-next]").forEach(btn=>btn.onclick=()=>{
+ openShortcut(Number(btn.dataset.shortcutRest)||120);
+ if(workout.index<exs.length-1){
+  workout.index++;
+  renderWorkout();
+  window.scrollTo({top:0,behavior:"instant"});
+ }
+});
 }
 
-function renderHistory(){const names=[...new Set(Object.values(state.logs).map(l=>l.exercise).filter(Boolean))].sort();let html=`<div class="card"><div class="h2">Histórico por exercício</div><div class="muted">Comparação automática: somente carga e repetições.</div></div>`;if(!names.length)html+=`<div class="card empty">Você ainda não registrou nenhuma série de trabalho.</div>`;for(const name of names){const arr=Object.values(state.logs).filter(l=>l.exercise===name&&(l.kind==="work"||l.kind==="cluster")&&l.reps!=="").sort((a,b)=>b.date.localeCompare(a.date)||(b.number||0)-(a.number||0)||(b.block||0)-(a.block||0));html+=`<div class="card"><div class="h2">${esc(name)}</div>${arr.slice(0,20).map(l=>`<div class="exercise"><div><div class="exercise-name">${fmt(l.date)} · Ciclo ${l.cycle||1} · Semana ${l.week}</div><div class="exercise-meta">${l.weight||"—"} kg × ${l.reps||"—"}${l.kind==="cluster"?` · bloco ${l.block}`:""}</div></div>${pill(l.kind==="cluster"?"cluster":"straight")}</div>`).join("")}</div>`;}layout(html);}
+function historyCycles(){return (state.cycles||[]).slice().sort((a,b)=>Number(b.id)-Number(a.id));}
+function historyWeekRows(key,index,cycleId){
+ return Array.from({length:7},(_,n)=>{
+  const week=n+1;
+  const logs=Object.values(state.logs||{}).filter(l=>Number(l.cycle||1)===Number(cycleId)&&Number(l.week)===week&&l.key===key&&Number(l.index)===index&&(l.kind==="work"||l.kind==="cluster")&&l.reps!=="").sort((a,b)=>(a.number||0)-(b.number||0)||(a.block||0)-(b.block||0));
+  return {week,logs};
+ });
+}
+function historyPerformance(row,method){
+ if(!row.logs.length)return `<span class="history-empty">—</span>`;
+ if(method==="cluster"){
+  const groups={};
+  row.logs.forEach(l=>(groups[l.number]??=[]).push(l));
+  return Object.keys(groups).sort((a,b)=>Number(a)-Number(b)).map(n=>{
+   const blocks=groups[n].sort((a,b)=>(a.block||0)-(b.block||0)).map(l=>`${l.weight||"—"} kg × ${l.reps||"—"}`).join(" / ");
+   return `<div class="history-set"><span>Set ${n}</span><strong>${blocks}</strong></div>`;
+  }).join("");
+ }
+ return row.logs.map(l=>`<div class="history-set"><span>Set ${l.number}</span><strong>${l.weight||"—"} kg × ${l.reps||"—"}</strong></div>`).join("");
+}
+function renderHistory(){
+ const cycles=historyCycles();
+ const cycleId=Number(state.historyCycle||state.cycle||1);
+ const cycle=cycles.find(c=>Number(c.id)===cycleId)||cycles[0]||{id:1};
+ const selected=state.historyWorkout||"u1";
+ const exs=exercisesFor(1,selected);
+ const tabs=["u1","u2","l1","l2"].map(k=>`<button class="history-tab ${selected===k?"active":""}" data-history-workout="${k}">${LABEL[k]}</button>`).join("");
+ const cycleTabs=cycles.map(c=>`<button class="history-cycle ${Number(c.id)===Number(cycle.id)?"active":""}" data-history-cycle="${c.id}">Ciclo ${c.id}</button>`).join("");
+ let cards="";
+ exs.forEach((e,i)=>{
+  const rows=historyWeekRows(selected,i,cycle.id);
+  const has=rows.some(r=>r.logs.length);
+  cards+=`<section class="history-ex-card ${has?"has-data":""}">
+   <div class="history-ex-head"><div class="history-ex-number">${i+1}</div><div class="history-ex-main"><div class="h2">${esc(e.name)}</div><div class="muted">${e.sets} ${e.sets===1?"work set":"work sets"} · ${e.method==="cluster"?"Cluster":"Straight"} · ${e.range} reps</div></div></div>
+   <div class="history-weeks">${rows.map(r=>`<div class="history-week ${r.logs.length?"filled":""}"><div class="history-week-label">Semana ${r.week}</div><div class="history-week-value">${historyPerformance(r,e.method)}</div></div>`).join("")}</div>
+  </section>`;
+ });
+ layout(`<section class="hero history-hero"><div class="eyebrow">Histórico</div><div class="h1">Evolução por treino</div><p class="muted">Compare o mesmo exercício ao longo das semanas, mantendo cada treino separado.</p>${cycleTabs?`<div class="history-cycles">${cycleTabs}</div>`:""}</section><div class="history-tabs">${tabs}</div><div class="history-summary"><strong>${LABEL[selected]}</strong><span>Ciclo ${cycle.id} · Semana 1 → 7</span></div><div class="history-list">${cards}</div>`);
+ document.querySelectorAll("[data-history-workout]").forEach(b=>b.onclick=()=>{state.historyWorkout=b.dataset.historyWorkout;save();renderHistory();});
+ document.querySelectorAll("[data-history-cycle]").forEach(b=>b.onclick=()=>{state.historyCycle=Number(b.dataset.historyCycle);save();renderHistory();});
+}
 function renderSettings(){const info=weekInfo();layout(`<div class="card"><div class="h2">Configurações</div><div class="stack"><div class="field"><label>Início do ciclo</label><input id="start" type="date" class="input" value="${state.startDate}"></div><div class="formgrid"><div class="field"><label>Descanso Straight (s)</label><input id="straight" type="number" class="input" value="${state.restStraight}"></div><div class="field"><label>Entre exercícios (s)</label><input id="between" type="number" class="input" value="${state.restBetweenExercises}"></div></div><div class="field"><label>Cluster entre blocos (s)</label><input id="cluster" type="number" class="input" value="${state.clusterRest}"></div><button class="btn" id="saveSettings">Salvar</button></div></div><div class="card"><div class="h2">Dados locais</div><div class="muted">Os registros desta versão ficam separados dos dados de teste anteriores. Você pode apagar os registros do ciclo atual sem apagar o treino programado.</div><button class="btn secondary" id="clearLogs" style="margin-top:10px">Limpar registros do ciclo</button></div><div class="card"><div class="h2">Ciclo ${state.cycle}</div><div class="muted">${state.cycleCompleted?"Ciclo concluído — pronto para iniciar o próximo.":`Semana atual: ${info.week} — ${PROGRAM[info.week].name}`}</div><button class="btn" id="newCycle" style="margin-top:10px">Iniciar novo ciclo</button></div><div class="card"><div class="h2">Atalho do iOS</div><p class="muted">Crie um Atalho chamado <strong>MR Saizen Timer</strong>. O app <strong>não inicia o descanso automaticamente</strong>; você toca no botão de descanso e ele abre o Atalho, passando a duração em segundos.</p><button class="btn secondary" id="testShortcut">Testar Atalho · 20s</button></div><div class="notice">Os registros ficam salvos localmente neste dispositivo. A progressão de carga é decidida por você.</div>`);document.getElementById("saveSettings").onclick=()=>{state.startDate=document.getElementById("start").value||state.startDate;state.restStraight=Math.max(1,Number(document.getElementById("straight").value)||120);state.restBetweenExercises=Math.max(1,Number(document.getElementById("between").value)||120);state.clusterRest=Math.max(1,Number(document.getElementById("cluster").value)||20);save();go("home");};document.getElementById("clearLogs").onclick=()=>{
  if(confirm("Apagar cargas, reps, observações e registros deste ciclo? O treino programado não será apagado.")){
    state.logs={};state.notes={};state.completed={};save();go("home");

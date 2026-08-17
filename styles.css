@@ -760,3 +760,67 @@ body.workout-page .wrap{
  .history-tab{font-size:11px;padding:10px 4px}
  .history-week{grid-template-columns:72px 1fr;padding-left:11px;padding-right:11px}
 }
+
+/* v26 — navigation and overview */
+.home-hint{margin:-5px 0 12px}
+.week-workout-list{display:grid;gap:10px;margin-bottom:28px}
+.week-workout-card{
+ width:100%;display:flex;align-items:center;gap:14px;text-align:left;
+ border:1px solid #292933;border-radius:17px;background:#15151c;color:inherit;
+ padding:15px;cursor:pointer
+}
+.week-workout-card.done{border-color:rgba(60,220,150,.42)}
+.week-workout-main{min-width:0;flex:1}
+.week-workout-arrow{font-size:24px;color:#8f8f9b}
+.back-list{border:0;background:transparent;color:#aaa;padding:0;margin:0 0 15px;font-weight:700}
+.overview-hero{padding-bottom:4px}
+.overview-actions{margin:12px 0 18px}
+.history-cycles{display:flex;gap:7px;overflow-x:auto;margin-top:14px;padding-bottom:2px}
+.history-cycle,.history-tab{border:1px solid #2b2b35;background:#15151c;color:#aaa;border-radius:999px;padding:9px 13px;font-size:12px;font-weight:700;white-space:nowrap}
+.history-cycle.active,.history-tab.active{background:#24242d;color:#fff;border-color:#555565}
+.history-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:14px 0 12px}
+.history-tab{border-radius:12px;padding:11px 6px;text-align:center}
+.history-summary{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 2px 10px;font-size:13px}
+.history-summary span{color:#8f8f9b;font-size:12px}
+.history-list{display:grid;gap:12px;padding-bottom:24px}
+.history-ex-card{border:1px solid #292933;background:#15151c;border-radius:17px;overflow:hidden}
+.history-ex-head{display:flex;gap:10px;padding:14px 14px 12px}
+.history-ex-number{width:30px;height:30px;border-radius:10px;background:#24242d;display:grid;place-items:center;font-weight:800}
+.history-ex-main{min-width:0}
+.history-weeks{border-top:1px solid #292933}
+.history-week{display:grid;grid-template-columns:82px 1fr;gap:10px;padding:10px 14px;border-bottom:1px solid #23232c;min-height:42px}
+.history-week:last-child{border-bottom:0}
+.history-week-label{font-size:12px;color:#8f8f9b;padding-top:2px}
+.history-week-value{font-size:12px;min-width:0}
+.history-week.filled{background:rgba(255,255,255,.018)}
+.history-set{display:flex;justify-content:space-between;gap:8px;line-height:1.45}
+.history-set span{color:#777783}
+.history-set strong{font-weight:650;text-align:right}
+.history-empty{color:#555562}
+@media(max-width:390px){.history-tabs{gap:5px}.history-tab{font-size:11px;padding:10px 4px}.history-week{grid-template-columns:72px 1fr;padding-left:11px;padding-right:11px}}
+
+/* v26 final — full workout navigation + history */
+.home-hint{margin:-5px 0 12px}
+.week-workout-list{display:grid;gap:10px;margin-bottom:28px}
+.week-workout-card{width:100%;display:flex;align-items:center;gap:14px;text-align:left;border:1px solid #292933;border-radius:17px;background:#15151c;color:inherit;padding:15px;cursor:pointer}
+.week-workout-card.done{border-color:rgba(60,220,150,.42)}
+.week-workout-main{min-width:0;flex:1}.week-workout-arrow{font-size:24px;color:#8f8f9b}
+.back-list{border:0;background:transparent;color:#aaa;padding:0;margin:0 0 15px;font-weight:700}
+.overview-actions{margin:12px 0 18px}
+.history-cycles{display:flex;gap:7px;overflow-x:auto;margin-top:14px;padding-bottom:2px}
+.history-cycle,.history-tab{border:1px solid #2b2b35;background:#15151c;color:#aaa;border-radius:999px;padding:9px 13px;font-size:12px;font-weight:700;white-space:nowrap}
+.history-cycle.active,.history-tab.active{background:#24242d;color:#fff;border-color:#555565}
+.history-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:14px 0 12px}
+.history-tab{border-radius:12px;padding:11px 6px;text-align:center}
+.history-summary{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:4px 2px 10px;font-size:13px}
+.history-summary span{color:#8f8f9b;font-size:12px}
+.history-list{display:grid;gap:12px;padding-bottom:24px}
+.history-ex-card{border:1px solid #292933;background:#15151c;border-radius:17px;overflow:hidden}
+.history-ex-head{display:flex;gap:10px;padding:14px 14px 12px}
+.history-ex-number{width:30px;height:30px;border-radius:10px;background:#24242d;display:grid;place-items:center;font-weight:800}
+.history-ex-main{min-width:0}.history-weeks{border-top:1px solid #292933}
+.history-week{display:grid;grid-template-columns:82px 1fr;gap:10px;padding:10px 14px;border-bottom:1px solid #23232c;min-height:42px}
+.history-week:last-child{border-bottom:0}.history-week-label{font-size:12px;color:#8f8f9b;padding-top:2px}
+.history-week-value{font-size:12px;min-width:0}.history-week.filled{background:rgba(255,255,255,.018)}
+.history-set{display:flex;justify-content:space-between;gap:8px;line-height:1.45}.history-set span{color:#777783}.history-set strong{font-weight:650;text-align:right}.history-empty{color:#555562}
+@media(max-width:390px){.history-tabs{gap:5px}.history-tab{font-size:11px;padding:10px 4px}.history-week{grid-template-columns:72px 1fr;padding-left:11px;padding-right:11px}}
