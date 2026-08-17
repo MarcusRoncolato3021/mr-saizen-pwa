@@ -38,7 +38,7 @@ function layout(content){document.body.className=route==="workout"?"workout-page
 function nav(){return `<nav class="nav"><div class="navin"><button class="${route==="home"?"active":""}" data-nav="home">🏠<br><span>Início</span></button><button class="${route==="history"?"active":""}" data-nav="history">📊<br><span>Histórico</span></button><button class="${route==="settings"?"active":""}" data-nav="settings">⚙️<br><span>Config.</span></button></div></nav>`;}
 function bindNav(){document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>go(b.dataset.nav));}
 function go(r){route=r;render();}
-function render(){if(route==="home"){if(state.cycleCompleted)renderCycleCompleted();else renderHome();}else if(route==="history")renderHistory();else if(route==="settings")renderSettings();else renderWorkout();bindNav();}
+function render(){if(route==="home"){if(state.cycleCompleted)renderCycleCompleted();else renderHome();}else if(route==="history")renderHistory();else if(route==="settings")renderSettings();else if(route==="overview")renderOverview();else renderWorkout();bindNav();}
 function cycleEndDate(){
  const d=localDate(state.startDate);d.setDate(d.getDate()+48);return dateISO(d);
 }
@@ -75,7 +75,8 @@ function openIOSShortcutTimer(seconds){
   window.location.href = url;
 }
 function renderHome(){const info=weekInfo(), p=PROGRAM[info.week], start=localDate(state.startDate), ws=new Date(start);ws.setDate(start.getDate()+(info.week-1)*7);const we=new Date(ws);we.setDate(ws.getDate()+6);let cards="";for(const d of DAYS){const dt=new Date(ws);dt.setDate(ws.getDate()+(d===1?0:d===2?1:d===4?3:4));const key=p.days[d], id=`${dateISO(dt)}|${info.week}|${key}`, done=!!state.completed[id];cards+=`<div class="card"><div class="row"><div><div class="h2">${LABEL[key]}</div><div class="muted">${DAYNAMES[d]} · ${fmt(dateISO(dt))} · ${d<=2?"Straight":"Cluster"}</div></div><button class="btn small" data-open="${info.week}|${key}|${dateISO(dt)}">${done?"Revisar":"Abrir"}</button></div></div>`;}
-const todayKey=workoutForDate(new Date());layout(`<section class="hero"><div class="eyebrow">Ciclo ${state.cycle}</div><div class="h1">Semana ${info.week} — ${p.name}</div><div class="muted">${fmt(dateISO(ws))} → ${fmt(dateISO(we))}</div><p class="muted">${p.note}</p><div class="weekbar">${[0,1,2,3,4,5,6].map(i=>{const d=new Date(ws);d.setDate(ws.getDate()+i);const dow=d.getDay();return `<div class="day ${dateISO(d)===todayISO()?"active":""} ${!p.days[dow]?"rest":""}">${DAYNAMES[dow]}<br>${d.getDate()}</div>`;}).join("")}</div></section><div class="section eyebrow">Treinos da semana</div><div class="grid">${cards}</div>${todayKey?`<div class="section eyebrow">Hoje</div><div class="card"><div class="row"><div><div class="h2">${LABEL[todayKey]}</div><div class="muted">Treino programado para hoje</div></div><button class="btn" data-open="${info.week}|${todayKey}|${todayISO()}">Iniciar</button></div></div>`:""}`);document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.open.split("|");startWorkout(Number(w),k,d);});}
+const todayKey=workoutForDate(new Date());layout(`<section class="hero"><div class="eyebrow">Ciclo ${state.cycle}</div><div class="h1">Semana ${info.week} — ${p.name}</div><div class="muted">${fmt(dateISO(ws))} → ${fmt(dateISO(we))}</div><p class="muted">${p.note}</p><div class="weekbar">${[0,1,2,3,4,5,6].map(i=>{const d=new Date(ws);d.setDate(ws.getDate()+i);const dow=d.getDay();return `<div class="day ${dateISO(d)===todayISO()?"active":""} ${!p.days[dow]?"rest":""}">${DAYNAMES[dow]}<br>${d.getDate()}</div>`;}).join("")}</div></section><div class="section eyebrow">Treinos da semana</div><div class="grid">${cards}</div>${todayKey?`<div class="section eyebrow">Hoje</div><div class="card"><div class="row"><div><div class="h2">${LABEL[todayKey]}</div><div class="muted">Treino programado para hoje</div></div><div class="row-actions"><button class="btn secondary small" data-overview="${info.week}|${todayKey}|${todayISO()}">📋 Ver treino completo</button><button class="btn small" data-open="${info.week}|${todayKey}|${todayISO()}">Iniciar</button></div></div></div>`:""}`);document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.open.split("|");startWorkout(Number(w),k,d);});
+document.querySelectorAll("[data-overview]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.overview.split("|");workout={week:Number(w),key:k,date:d,index:0};route="overview";renderOverview();});}
 function startWorkout(week,key,date){workout={week,key,date,index:0};route="workout";renderWorkout();bindNav();}
 function noteKey(){return `${workout.date}|${workout.week}|${workout.key}|${workout.index}`;}
 function logId(kind,number,block=0){return `${workout.date}|${workout.week}|${workout.key}|${workout.index}|${kind}|${number}|${block}`;}
@@ -240,6 +241,65 @@ function lockWorkoutFooter(el){
   };
 }
 
+
+function overviewLastSession(name,before){
+ const arr=Object.values(state.logs||{}).filter(l=>l.exercise===name&&l.kind==="work"&&l.date<before&&l.reps!=="")
+   .sort((a,b)=>b.date.localeCompare(a.date)||(b.number||0)-(a.number||0));
+ if(!arr.length)return null;
+ const d=arr[0].date;
+ const same=arr.filter(x=>x.date===d).sort((a,b)=>(a.number||0)-(b.number||0));
+ return same.map(x=>`${x.weight||"—"} kg × ${x.reps||"—"}`).join(" · ");
+}
+function overviewLastNote(key,index,before){
+ const notes=Object.entries(state.notes||{}).map(([k,v])=>{
+   const p=k.split("|");
+   return {date:p[0],key:p[2],index:p[3],v};
+ }).filter(x=>x.key===key&&String(x.index)===String(index)&&x.date<before&&String(x.v||"").trim()!=="")
+   .sort((a,b)=>b.date.localeCompare(a.date));
+ return notes[0]?.v||"";
+}
+function renderOverview(){
+ const exs=exercisesFor(workout.week,workout.key);
+ const p=PROGRAM[workout.week];
+ let cards="";
+ exs.forEach((e,i)=>{
+   const logs=Object.values(state.logs||{}).filter(l=>l.date===workout.date&&l.week===workout.week&&l.key===workout.key&&Number(l.index)===i);
+   const relevant=logs.filter(l=>l.kind==="work"||l.kind==="cluster");
+   const done=relevant.length>0&&relevant.every(l=>l.completed);
+   const started=relevant.some(l=>l.completed);
+   const status=done?"✓ Concluído":started?"Em andamento":"Não iniciado";
+   const statusClass=done?"done":started?"progress":"pending";
+   const last=overviewLastSession(e.name,workout.date);
+   const note=overviewLastNote(workout.key,i,workout.date);
+   cards+=`<button class="overview-card ${statusClass}" data-overview-index="${i}">
+     <div class="overview-top">
+       <div class="overview-number">${i+1}</div>
+       <div class="overview-main">
+         <div class="overview-title">${esc(e.name)}</div>
+         <div class="overview-meta">${e.sets} ${e.sets===1?"work set":"work sets"} · ${e.method==="cluster"?"Cluster":"Straight"} · ${e.range} reps</div>
+       </div>
+       <span class="overview-status">${status}</span>
+     </div>
+     ${last?`<div class="overview-last"><span>Última sessão</span><strong>${esc(last)}</strong></div>`:""}
+     ${note?`<div class="overview-note">📝 ${esc(note)}</div>`:""}
+   </button>`;
+ });
+ layout(`<section class="hero">
+   <div class="eyebrow">Semana ${workout.week} · ${p.name}</div>
+   <div class="h1">${LABEL[workout.key]}</div>
+   <div class="muted">Visão geral · ${exs.length} exercícios</div>
+ </section>
+ <div class="overview-actions"><button class="btn" id="overviewContinue">▶ Continuar treino</button></div>
+ <div class="section eyebrow">Todos os exercícios</div>
+ <div class="overview-list">${cards}</div>`);
+ document.getElementById("overviewContinue").onclick=()=>{route="workout";renderWorkout();};
+ document.querySelectorAll("[data-overview-index]").forEach(b=>b.onclick=()=>{
+   workout.index=Number(b.dataset.overviewIndex);
+   route="workout";
+   renderWorkout();
+ });
+}
+
 function renderWorkout(){
 const e=exercisesFor(workout.week,workout.key)[workout.index],
 exs=exercisesFor(workout.week,workout.key),
@@ -254,7 +314,7 @@ let html=`<section class="workout-head">
 
 <section class="exercise-strip">
   <div><div class="exercise-title">${esc(e.name)}</div><div class="exercise-sub">${e.sets} ${e.sets===1?"work set":"work sets"} · meta ${e.range}</div></div>
-  <button class="edit-link" id="editEx">Editar</button>
+  <div class="head-actions"><button class="edit-link" id="viewOverview">☷ Lista</button><button class="edit-link" id="editEx">Editar</button></div>
 </section>
 
 <div class="last-line"><span>Última sessão</span><strong>${last?esc(last.summary):"Sem histórico"}</strong></div>
@@ -278,6 +338,7 @@ ${previousNote?`<section class="previous-note"><div class="eyebrow">NOTA DA ÚLT
 <div class="workout-footer">${workout.index>0?'<button class="btn secondary" id="prev">← Anterior</button>':''}${workout.index<exs.length-1?'<button class="btn" id="next">Próximo →</button>':'<button class="btn" id="finish">✓ Concluir</button>'}</div>`;
 
 layout(html);
+document.getElementById("viewOverview").onclick=()=>{route="overview";renderOverview();};
 document.getElementById("editEx").onclick=()=>{
 const n=prompt("Nome do exercício",e.name);
 if(n&&n.trim()){state.edits[workout.week]??={};state.edits[workout.week][workout.key]??={};state.edits[workout.week][workout.key][workout.index]={name:n.trim()};save();renderWorkout();}
