@@ -90,7 +90,29 @@ function lastExerciseNote(){
  return notes[0]||null;
 }
 
-function getLog(id,defaults){if(!state.logs[id])state.logs[id]={id,...defaults,cycle:state.cycle,weight:"",reps:"",completed:false};return state.logs[id];}
+function previousLogFor(defaults){
+ const candidates=Object.values(state.logs||{}).filter(x=>
+   x.exercise===defaults.exercise &&
+   x.kind===defaults.kind &&
+   String(x.number||"")===String(defaults.number||"") &&
+   String(x.block||"")===String(defaults.block||"") &&
+   x.date<defaults.date &&
+   (x.weight!=="" || x.reps!=="")
+ ).sort((a,b)=>b.date.localeCompare(a.date));
+ return candidates[0]||null;
+}
+function getLog(id,defaults){
+ if(!state.logs[id]){
+   const previous=previousLogFor(defaults);
+   state.logs[id]={
+     id,...defaults,cycle:state.cycle,
+     weight:previous?.weight??"",
+     reps:previous?.reps??"",
+     completed:false
+   };
+ }
+ return state.logs[id];
+}
 function singleSet(e,kind,number,min,max){
 const id=logId(kind,number),
 l=getLog(id,{date:workout.date,week:workout.week,key:workout.key,index:workout.index,exercise:e.name,kind,number}),
