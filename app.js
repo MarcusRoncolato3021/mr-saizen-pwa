@@ -34,7 +34,13 @@ function workoutMethod(week,key,i){const day=Object.keys(PROGRAM[week].days).fin
 function exercisesFor(week,key){return BASE[key].map((x,i)=>({name:state.edits?.[week]?.[key]?.[i]?.name||x[0],range:x[1],method:workoutMethod(week,key,i),sets:SETS[week][key][i]}));}
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function pill(m){return `<span class="pill ${m}">${m==="cluster"?"CLUSTER":"STRAIGHT"}</span>`;}
-function layout(content){document.body.className=route==="workout"?"workout-page":"";app.innerHTML=`<div class="wrap"><header class="top"><div><div class="brand">MR. SAIZEN METHOD</div><div class="sub">${route==="workout"?"Treino em andamento":"Diário de treino · 7 semanas"}</div></div>${route==="workout"?'<button class="btn secondary small" id="exit">Sair</button>':""}</header>${content}</div>${nav()}`;const ex=document.getElementById("exit");if(ex)ex.onclick=()=>go("home");}
+function layout(content){
+ document.body.className=route==="workout"?"workout-page":"";
+ const workoutActions=route==="workout"?'<div class="top-actions"><button class="btn secondary small" id="viewOverview">☷ Lista</button><button class="btn secondary small" id="exit">Sair</button></div>':"";
+ app.innerHTML=`<div class="wrap"><header class="top"><div><div class="brand">MR. SAIZEN METHOD</div><div class="sub">${route==="workout"?"Treino em andamento":"Diário de treino · 7 semanas"}</div></div>${workoutActions}</header>${content}</div>${nav()}`;
+ const ex=document.getElementById("exit");if(ex)ex.onclick=()=>go("home");
+ const list=document.getElementById("viewOverview");if(list)list.onclick=()=>{route="overview";renderOverview();};
+}
 function nav(){return `<nav class="nav"><div class="navin"><button class="${route==="home"?"active":""}" data-nav="home">🏠<br><span>Início</span></button><button class="${route==="history"?"active":""}" data-nav="history">📊<br><span>Histórico</span></button><button class="${route==="settings"?"active":""}" data-nav="settings">⚙️<br><span>Config.</span></button></div></nav>`;}
 function bindNav(){document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>go(b.dataset.nav));}
 function go(r){route=r;render();}
@@ -314,7 +320,7 @@ let html=`<section class="workout-head">
 
 <section class="exercise-strip">
   <div><div class="exercise-title">${esc(e.name)}</div><div class="exercise-sub">${e.sets} ${e.sets===1?"work set":"work sets"} · meta ${e.range}</div></div>
-  <div class="head-actions"><button class="edit-link" id="viewOverview">☷ Lista</button><button class="edit-link" id="editEx">Editar</button></div>
+  <div class="head-actions"><button class="edit-link" id="editEx">Editar</button></div>
 </section>
 
 <div class="last-line"><span>Última sessão</span><strong>${last?esc(last.summary):"Sem histórico"}</strong></div>

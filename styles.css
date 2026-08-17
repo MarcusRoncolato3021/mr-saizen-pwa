@@ -824,3 +824,12 @@ body.workout-page .wrap{
 .history-week-value{font-size:12px;min-width:0}.history-week.filled{background:rgba(255,255,255,.018)}
 .history-set{display:flex;justify-content:space-between;gap:8px;line-height:1.45}.history-set span{color:#777783}.history-set strong{font-weight:650;text-align:right}.history-empty{color:#555562}
 @media(max-width:390px){.history-tabs{gap:5px}.history-tab{font-size:11px;padding:10px 4px}.history-week{grid-template-columns:72px 1fr;padding-left:11px;padding-right:11px}}
+
+.top-actions{display:flex;align-items:center;gap:7px}
+.top-actions .btn{white-space:nowrap}
+
+/* v28 — bottom navigation is global, including workout screens */
+body.workout-page .nav{display:block !important}
+body.workout-page .wrap{padding-bottom:calc(145px + var(--safe-bottom)) !important}
+.top-actions{display:flex;align-items:center;gap:7px}
+.top-actions .btn{white-space:nowrap}
