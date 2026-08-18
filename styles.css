@@ -833,3 +833,6 @@ body.workout-page .nav{display:block !important}
 body.workout-page .wrap{padding-bottom:calc(145px + var(--safe-bottom)) !important}
 .top-actions{display:flex;align-items:center;gap:7px}
 .top-actions .btn{white-space:nowrap}
+
+/* v29 — 2:00 rest after every work set; only the final work set advances */
+.timer-btn{width:100%;margin-top:7px}

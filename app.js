@@ -137,7 +137,7 @@ return `<div class="set-row ${l.completed?"is-done":""}">
   </div>
   <div class="set-actions">
     <button class="status-btn ${l.completed?"saved":"primary"}" data-complete="${id}">${l.completed?"✓ Salvo":"Registrar"}</button>
-    ${isWork&&isFinalWork&&l.completed?`<button class="timer-btn auto-next-rest" data-shortcut-rest="${state.restStraight}" data-auto-next="true">⏱️ Iniciar descanso · <b>${formatTime(state.restStraight)}</b></button>`:""}
+    ${isWork&&l.completed?`<button class="timer-btn ${isFinalWork?"auto-next-rest":""}" data-shortcut-rest="${state.restStraight}" ${isFinalWork?'data-auto-next="true"':""}>⏱️ Iniciar descanso · <b>${formatTime(state.restStraight)}</b></button>`:""}
   </div>
 </div>`;
 }
@@ -152,7 +152,7 @@ html+=`<div class="cluster-block ${l.completed?"is-done":""}">
   <div class="set-actions">
     <button class="status-btn ${l.completed?"saved":"primary"}" data-complete="${id}">${l.completed?"✓ Salvo":"Registrar"}</button>
     ${l.completed&&b<3?`<button class="timer-btn" data-shortcut-rest="${state.clusterRest}">⏱️ Iniciar descanso · <b>${formatTime(state.clusterRest)}</b></button>`:""}
-    ${l.completed&&b===3?`<button class="timer-btn cluster-final-rest" data-shortcut-rest="${state.restStraight}">⏱️ Iniciar descanso · <b>${formatTime(state.restStraight)}</b></button>`:""}
+    ${l.completed&&b===3?`<button class="timer-btn cluster-final-rest ${s===e.sets?"auto-next-rest":""}" data-shortcut-rest="${state.restStraight}" ${s===e.sets?'data-auto-next="true"':""}>⏱️ Iniciar descanso · <b>${formatTime(state.restStraight)}</b></button>`:""}
   </div>
 </div>`;
 }
