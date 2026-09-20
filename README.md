@@ -1,28 +1,18 @@
-MR Saizen Method PWA
+MR Saizen Method — v41
 
-v3: o descanso NÃO inicia automaticamente. Após registrar uma série, o usuário toca manualmente no botão de descanso. No iPhone, o botão abre o Atalho “MR Saizen Timer” usando shortcuts:// e passa a duração em segundos.
+Esta versão força uma atualização real do PWA.
 
-Padrões:
-- Straight: 120s
-- Entre exercícios: 120s (acionamento manual)
-- Cluster: 20s entre blocos (acionamento manual)
+1. Substitua os arquivos da raiz do repositório pelos arquivos deste ZIP.
+2. Faça commit/push e aguarde o deploy da Vercel.
+3. Abra a URL do site no Safari pelo menos uma vez.
+4. Feche e reabra o PWA.
+5. A tela inicial deve mostrar “Ciclo X · v41”.
 
+A Semana 7 é explicitamente:
+- Upper 1: todos Straight
+- Lower 1: todos Straight
+- Braços: todos Straight
+- Upper 2: CSCCSCCC
+- Lower 2: SCCCSCSCS
 
-v33: treino extra de Braços aos sábados.
-- Supino para Tríceps
-- Francês no Cabo
-- Tríceps Testa no Cabo
-- Rosca Concentrado
-- Rosca Bayesiana
-- Rosca Martelo
-- Todos com 4–6 reps e 1 work set Straight.
-- Aparece em todas as 7 semanas e no histórico como “Braços”.
-
-
-v35: revisão completa da periodização.
-- Método Straight/Cluster conferido exercício por exercício nas 7 semanas com base na periodização original.
-- Semana 7 Upper 1 é explicitamente Straight em todos os exercícios.
-- Semana 7 Lower 1 também é Straight.
-- Upper 2 e Lower 2 mantêm os exercícios Cluster/Straight individuais previstos na periodização.
-- Treino de Braços de sábado permanece sempre Straight, 1 série por exercício, 4–6 reps.
-- Cache atualizado para v20.
+A lógica de método da Semana 7 para Upper 1/Lower 1/Braços é forçada diretamente no código, independentemente de qualquer estado salvo.

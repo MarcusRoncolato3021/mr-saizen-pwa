@@ -21,7 +21,7 @@ const CANONICAL_WEEK_ORDER={1:["u1","l1","u2","l2","arms"],2:["u2","l2","u1","l1
 const DAYNAMES={0:"Dom",1:"Seg",2:"Ter",3:"Qua",4:"Qui",5:"Sex",6:"Sáb"};
 const LABEL={u1:"Upper 1",u2:"Upper 2",l1:"Lower 1",l2:"Lower 2",arms:"Braços"};
 const KEY="mr-saizen-state-v3";
-const APP_VERSION="v40";
+const APP_VERSION="v41";
 const app=document.getElementById("app");
 let state=loadState(), route="home", workout=null, timer=null, timerSeconds=0;
 function defaultState(){return {startDate:"2026-08-10",cycle:1,restStraight:120,restBetweenExercises:120,clusterRest:20,logs:{},notes:{},edits:{},completed:{},cycles:[{id:1,name:"Ciclo 1",startDate:"2026-08-10"}],cycleCompleted:false};}
@@ -64,6 +64,8 @@ function todayISO(){return dateISO(new Date());}
 function weekInfo(date=new Date()){const start=localDate(state.startDate), d=new Date(date.getFullYear(),date.getMonth(),date.getDate()), diff=Math.floor((d-start)/86400000);return {week:Math.max(1,Math.min(7,Math.floor(diff/7)+1)),diff};}
 function workoutForDate(date=new Date()){const w=weekInfo(date).week;return PROGRAM[w].days[date.getDay()]||null;}
 function workoutMethod(week,key,i){
+  // Semana 7 é uma exceção explícita da periodização: U1 e L1 são 100% Straight.
+  if(Number(week)===7 && (key==="u1" || key==="l1" || key==="arms")) return "straight";
   const code=METHODS?.[String(week)]?.[key]?.[i];
   if(code!=="C" && code!=="S") throw new Error(`Método não definido: semana ${week} ${key} exercício ${i+1}`);
   return code==="C"?"cluster":"straight";
@@ -138,7 +140,13 @@ function openIOSShortcutTimer(seconds){
     "&input=" + encodeURIComponent(String(duration));
   window.location.href = url;
 }
-function renderHome(){const info=weekInfo();const selectedWeek=Math.max(1,Math.min(7,Number(state.viewWeek)||info.week));const p=PROGRAM[selectedWeek], start=localDate(state.startDate), ws=new Date(start);ws.setDate(start.getDate()+(selectedWeek-1)*7);const we=new Date(ws);we.setDate(ws.getDate()+6);let cards="";for(const d of DAYS){const dt=new Date(ws);dt.setDate(ws.getDate()+(d-1));const key=p.days[d], id=`${dateISO(dt)}|${selectedWeek}|${key}`, done=!!state.completed[id];cards+=`<div class="card"><div class="row"><div><div class="h2">${LABEL[key]}</div><div class="muted">${DAYNAMES[d]} · ${fmt(dateISO(dt))} · ${d===6?"Straight":(d<=2?"Straight":"Cluster")}</div></div><button class="btn small" data-open="${selectedWeek}|${key}|${dateISO(dt)}">${done?"Revisar":"Abrir"}</button></div></div>`;}
+function weekCardMethod(week,key){
+  const ms=exercisesFor(week,key).map(e=>e.method);
+  if(ms.every(m=>m==="straight")) return "Straight";
+  if(ms.every(m=>m==="cluster")) return "Cluster";
+  return "Misto";
+}
+function renderHome(){const info=weekInfo();const selectedWeek=Math.max(1,Math.min(7,Number(state.viewWeek)||info.week));const p=PROGRAM[selectedWeek], start=localDate(state.startDate), ws=new Date(start);ws.setDate(start.getDate()+(selectedWeek-1)*7);const we=new Date(ws);we.setDate(ws.getDate()+6);let cards="";for(const d of DAYS){const dt=new Date(ws);dt.setDate(ws.getDate()+(d-1));const key=p.days[d], id=`${dateISO(dt)}|${selectedWeek}|${key}`, done=!!state.completed[id];cards+=`<div class="card"><div class="row"><div><div class="h2">${LABEL[key]}</div><div class="muted">${DAYNAMES[d]} · ${fmt(dateISO(dt))} · ${weekCardMethod(selectedWeek,key)}</div></div><button class="btn small" data-open="${selectedWeek}|${key}|${dateISO(dt)}">${done?"Revisar":"Abrir"}</button></div></div>`;}
 const todayKey=selectedWeek===info.week?workoutForDate(new Date()):null;layout(`<section class="hero"><div class="eyebrow">Ciclo ${state.cycle} · ${APP_VERSION}</div><div class="h1">Semana ${selectedWeek} — ${p.name}</div><div class="muted">${fmt(dateISO(ws))} → ${fmt(dateISO(we))}</div><p class="muted">${p.note}</p><div class="weekbar">${[1,2,3,4,5,6,7].map(w=>`<button type="button" class="week-switch ${selectedWeek===w?"active":""} ${info.week===w?"current":""}" data-week-select="${w}"><span>Semana</span><b>${w}</b>${info.week===w?"<small>ATUAL</small>":""}</button>`).join("")}</div></section><div class="week-navigation"><button type="button" class="btn secondary small" data-week-prev ${selectedWeek===1?"disabled":""}>← Semana anterior</button><div class="week-navigation-title">Semana ${selectedWeek} de 7</div><button type="button" class="btn secondary small" data-week-next ${selectedWeek===7?"disabled":""}>Próxima semana →</button></div><div class="section eyebrow">Treinos da semana</div><div class="grid">${cards}</div>${todayKey?`<div class="section eyebrow">Hoje</div><div class="card"><div class="row"><div><div class="h2">${LABEL[todayKey]}</div><div class="muted">Treino programado para hoje</div></div><div class="row-actions"><button class="btn secondary small" data-overview="${selectedWeek}|${todayKey}|${todayISO()}">📋 Ver treino completo</button><button class="btn small" data-open="${selectedWeek}|${todayKey}|${todayISO()}">Iniciar</button></div></div></div>`:""}`);document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.open.split("|");startWorkout(Number(w),k,d);});
 document.querySelectorAll("[data-overview]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.overview.split("|");workout={week:Number(w),key:k,date:d,index:0};route="overview";renderOverview();});document.querySelectorAll("[data-week-select]").forEach(b=>b.onclick=()=>{state.viewWeek=Number(b.dataset.weekSelect);save();renderHome();});const prev=document.querySelector("[data-week-prev]"),next=document.querySelector("[data-week-next]");if(prev)prev.onclick=()=>{if(selectedWeek>1){state.viewWeek=selectedWeek-1;save();renderHome();}};if(next)next.onclick=()=>{if(selectedWeek<7){state.viewWeek=selectedWeek+1;save();renderHome();}};}
 function startWorkout(week,key,date){
@@ -489,6 +497,5 @@ function openShortcut(seconds){
  window.location.assign(url);
 }
 window.addEventListener("error",e=>{console.error(e.error||e.message);app.innerHTML=`<div class="wrap"><div class="card"><div class="h2">Erro ao carregar o app</div><p class="muted">${esc(e.message||"Erro desconhecido")}</p><button class="btn" onclick="location.reload()">Recarregar</button></div></div>`;});
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 render();
 })();
