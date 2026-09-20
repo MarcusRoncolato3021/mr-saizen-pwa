@@ -6,3 +6,14 @@ Padrões:
 - Straight: 120s
 - Entre exercícios: 120s (acionamento manual)
 - Cluster: 20s entre blocos (acionamento manual)
+
+
+v33: treino extra de Braços aos sábados.
+- Supino para Tríceps
+- Francês no Cabo
+- Tríceps Testa no Cabo
+- Rosca Concentrado
+- Rosca Bayesiana
+- Rosca Martelo
+- Todos com 4–6 reps e 1 work set Straight.
+- Aparece em todas as 7 semanas e no histórico como “Braços”.

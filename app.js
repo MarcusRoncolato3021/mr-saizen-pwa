@@ -1,12 +1,12 @@
 (() => {
 "use strict";
-const PROGRAM={"1":{"name":"Base","note":"Entrada controlada, menor fadiga global.","days":{"1":"u1","2":"l1","4":"u2","5":"l2"}},"2":{"name":"Build 1","note":"Primeiro aumento concentrado nos grupos de maior prioridade.","days":{"1":"u2","2":"l2","4":"u1","5":"l1"}},"3":{"name":"Build 2","note":"Costas chegam antes ao teto por prioridade e frequência nos uppers.","days":{"1":"u1","2":"l1","4":"u2","5":"l2"}},"4":{"name":"Overload 1","note":"Grupos Tier III chegam ao teto; Tier I permanece controlado.","days":{"1":"u2","2":"l2","4":"u1","5":"l1"}},"5":{"name":"Overload 2","note":"Mantém teto dos grupos prioritários sem exceder tiers máximos.","days":{"1":"u1","2":"l1","4":"u2","5":"l2"}},"6":{"name":"Peak Week","note":"Maior exigência geral da periodização, sem exceder o tier máximo.","days":{"1":"u2","2":"l2","4":"u1","5":"l1"}},"7":{"name":"Deload de Volume","note":"Redução clara de volume, mantendo estrutura e exercícios principais.","days":{"1":"u1","2":"l1","4":"u2","5":"l2"}}};
-const BASE={"u1":[["Pulldown Aberto Pronado","4–6"],["Remada Articulada Sagital","4–6"],["T-Bar com Apoio","4–6"],["Desenvolvimento Máquina","4–6"],["Elevação Lateral Máquina","5–9"],["Supino Pegada Neutra","4–6"],["Voador Máquina","5–9"],["Rosca Inclinado 45°","5–9"]],"u2":[["Remada Articulada Sagital","4–6"],["Remada Curvada","4–6"],["Desenvolvimento Máquina","4–6"],["Elevação Lateral Máquina","5–9"],["Pullover com Halter","4–6"],["Press Transversal","4–6"],["Voador Máquina","5–9"],["Rosca Scott","5–9"]],"l1":[["Cadeira Abdutora","5–9"],["Glute Bridge","4–6"],["Leg Press 45","4–6"],["Cadeira Flexora","5–9"],["Mesa Flexora","5–9"],["Panturrilha em Pé","5–9"],["Leg Unilateral","4–6"],["Cadeira Extensora — pico na fase alongada","5–9"],["Tríceps Unilateral no Cabo","5–9"]],"l2":[["Rack Pull","4–6"],["Cadeira Flexora","5–9"],["Mesa Flexora","5–9"],["Cadeira Abdutora","5–9"],["Elevação Pélvica","4–6"],["Panturrilha em Pé","5–9"],["Split Squat no Smith","4–6"],["Cadeira Extensora — pico na fase contraída","5–9"],["Pullover com Halter","4–6"]]};
+const PROGRAM={"1":{"name":"Base","note":"Entrada controlada, menor fadiga global.","days":{"1":"u1","2":"l1","4":"u2","5":"l2","6":"arms"}},"2":{"name":"Build 1","note":"Primeiro aumento concentrado nos grupos de maior prioridade.","days":{"1":"u2","2":"l2","4":"u1","5":"l1","6":"arms"}},"3":{"name":"Build 2","note":"Costas chegam antes ao teto por prioridade e frequência nos uppers.","days":{"1":"u1","2":"l1","4":"u2","5":"l2","6":"arms"}},"4":{"name":"Overload 1","note":"Grupos Tier III chegam ao teto; Tier I permanece controlado.","days":{"1":"u2","2":"l2","4":"u1","5":"l1","6":"arms"}},"5":{"name":"Overload 2","note":"Mantém teto dos grupos prioritários sem exceder tiers máximos.","days":{"1":"u1","2":"l1","4":"u2","5":"l2","6":"arms"}},"6":{"name":"Peak Week","note":"Maior exigência geral da periodização, sem exceder o tier máximo.","days":{"1":"u2","2":"l2","4":"u1","5":"l1","6":"arms"}},"7":{"name":"Deload de Volume","note":"Redução clara de volume, mantendo estrutura e exercícios principais.","days":{"1":"u1","2":"l1","4":"u2","5":"l2","6":"arms"}}};
+const BASE={"u1":[["Pulldown Aberto Pronado","4–6"],["Remada Articulada Sagital","4–6"],["T-Bar com Apoio","4–6"],["Desenvolvimento Máquina","4–6"],["Elevação Lateral Máquina","5–9"],["Supino Pegada Neutra","4–6"],["Voador Máquina","5–9"],["Rosca Inclinado 45°","5–9"]],"u2":[["Remada Articulada Sagital","4–6"],["Remada Curvada","4–6"],["Desenvolvimento Máquina","4–6"],["Elevação Lateral Máquina","5–9"],["Pullover com Halter","4–6"],["Press Transversal","4–6"],["Voador Máquina","5–9"],["Rosca Scott","5–9"]],"l1":[["Cadeira Abdutora","5–9"],["Glute Bridge","4–6"],["Leg Press 45","4–6"],["Cadeira Flexora","5–9"],["Mesa Flexora","5–9"],["Panturrilha em Pé","5–9"],["Leg Unilateral","4–6"],["Cadeira Extensora — pico na fase alongada","5–9"],["Tríceps Unilateral no Cabo","5–9"]],"l2":[["Rack Pull","4–6"],["Cadeira Flexora","5–9"],["Mesa Flexora","5–9"],["Cadeira Abdutora","5–9"],["Elevação Pélvica","4–6"],["Panturrilha em Pé","5–9"],["Split Squat no Smith","4–6"],["Cadeira Extensora — pico na fase contraída","5–9"],["Pullover com Halter","4–6"]],"arms":[["Supino para Tríceps","4–6"],["Francês no Cabo","4–6"],["Tríceps Testa no Cabo","4–6"],["Rosca Concentrado","4–6"],["Rosca Bayesiana","4–6"],["Rosca Martelo","4–6"]]};
 const CLUSTER={"u1":[1,1,1,1,1,1,1,1],"u2":[1,0,1,1,0,1,1,1],"l1":[1,0,1,1,1,1,0,1,0],"l2":[0,1,1,1,0,1,0,1,0]};
-const SETS={"1":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,1,1,1,1,1,1,1,1],"u2":[1,1,1,1,1,1,1,1],"l2":[1,1,1,1,1,1,1,1,1]},"2":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[2,1,2,2,1,1,1,1],"l2":[1,2,2,2,2,1,1,1,1]},"3":{"u1":[2,2,2,2,2,2,1,1],"l1":[2,2,1,2,2,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[1,1,1,1,2,1,1,1,2]},"4":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[2,2,2,2,2,1,1,1],"l2":[2,2,2,2,2,1,1,1,2]},"5":{"u1":[2,2,2,2,2,2,2,1],"l1":[2,2,1,2,2,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[2,2,2,2,2,1,1,1,2]},"6":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[2,2,2,2,2,2,2,1],"l2":[2,2,2,2,2,1,1,1,2]},"7":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,1,1,1,1,1,1,1,1],"u2":[1,1,1,1,1,1,1,1],"l2":[1,1,1,1,1,1,1,1,1]}};
-const DAYS=[1,2,4,5];
+const SETS={"1":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,1,1,1,1,1,1,1,1],"u2":[1,1,1,1,1,1,1,1],"l2":[1,1,1,1,1,1,1,1,1],"arms":[1,1,1,1,1,1]},"2":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,1,1,1,1,1,1,1],"l2":[1,1,1,1,2,1,1,1,1],"arms":[1,1,1,1,1,1]},"3":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[1,1,1,1,2,1,1,1,2],"arms":[1,1,1,1,1,1]},"4":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[2,1,1,1,2,1,1,1,2],"arms":[1,1,1,1,1,1]},"5":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[2,1,1,1,2,1,1,1,2],"arms":[1,1,1,1,1,1]},"6":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[2,1,1,1,2,1,1,1,2],"arms":[1,1,1,1,1,1]},"7":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,1,1,1,1,1,1,1,1],"u2":[1,1,1,1,1,1,1,1],"l2":[1,1,1,1,1,1,1,1,1],"arms":[1,1,1,1,1,1]}};
+const DAYS=[1,2,4,5,6];
 const DAYNAMES={0:"Dom",1:"Seg",2:"Ter",3:"Qua",4:"Qui",5:"Sex",6:"Sáb"};
-const LABEL={u1:"Upper 1",u2:"Upper 2",l1:"Lower 1",l2:"Lower 2"};
+const LABEL={u1:"Upper 1",u2:"Upper 2",l1:"Lower 1",l2:"Lower 2",arms:"Braços"};
 const KEY="mr-saizen-state-v3";
 const app=document.getElementById("app");
 let state=loadState(), route="home", workout=null, timer=null, timerSeconds=0;
@@ -24,6 +24,25 @@ function loadState(){
  }catch(e){return defaultState();}
 }
 function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+// A periodização se repete automaticamente a cada 7 semanas (49 dias).
+function syncCycleWithDate(){
+ const base=localDate(state.startDate);
+ const today=new Date();
+ const todayOnly=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+ const diff=Math.floor((todayOnly-base)/86400000);
+ if(diff<0)return;
+ const targetCycle=Math.floor(diff/49)+1;
+ if(targetCycle===Number(state.cycle||1))return;
+ const newStart=new Date(base);
+ newStart.setDate(newStart.getDate()+(targetCycle-Number(state.cycle||1))*49);
+ const newStartISO=dateISO(newStart);
+ state.cycle=targetCycle;
+ state.startDate=newStartISO;
+ state.cycleCompleted=false;
+ state.cycles=state.cycles||[];
+ if(!state.cycles.some(c=>Number(c.id)===targetCycle))state.cycles.push({id:targetCycle,name:`Ciclo ${targetCycle}`,startDate:newStartISO});
+ save();
+}
 function localDate(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d);}
 function dateISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
 function fmt(s){return localDate(s).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"});}
@@ -44,24 +63,23 @@ function layout(content){
 function nav(){return `<nav class="nav"><div class="navin"><button class="${route==="home"?"active":""}" data-nav="home">🏠<br><span>Início</span></button><button class="${route==="history"?"active":""}" data-nav="history">📊<br><span>Histórico</span></button><button class="${route==="settings"?"active":""}" data-nav="settings">⚙️<br><span>Config.</span></button></div></nav>`;}
 function bindNav(){document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>go(b.dataset.nav));}
 function go(r){route=r;render();}
-function render(){if(route==="home"){if(state.cycleCompleted)renderCycleCompleted();else renderHome();}else if(route==="history")renderHistory();else if(route==="settings")renderSettings();else if(route==="overview")renderOverview();else renderWorkout();bindNav();}
+function render(){syncCycleWithDate();if(route==="home"){renderHome();}else if(route==="history")renderHistory();else if(route==="settings")renderSettings();else if(route==="overview")renderOverview();else renderWorkout();bindNav();}
 function cycleEndDate(){
  const d=localDate(state.startDate);d.setDate(d.getDate()+48);return dateISO(d);
 }
 function startNewCycle(){
- const raw=prompt("Data de início do novo ciclo (AAAA-MM-DD)",todayISO());
- if(!raw)return;
- if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(raw)||isNaN(localDate(raw).getTime())){
-   alert("Data inválida. Use o formato AAAA-MM-DD.");return;
- }
  const id=(state.cycle||1)+1;
+ const d=localDate(state.startDate);
+ d.setDate(d.getDate()+49);
+ const raw=dateISO(d);
  state.cycle=id;
  state.startDate=raw;
  state.cycleCompleted=false;
  state.cycles=state.cycles||[];
- state.cycles.push({id,name:`Ciclo ${id}`,startDate:raw});
+ if(!state.cycles.some(c=>Number(c.id)===id))state.cycles.push({id,name:`Ciclo ${id}`,startDate:raw});
  save();go("home");
 }
+
 function renderCycleCompleted(){
  layout(`<section class="hero cycle-complete">
    <div class="eyebrow">Ciclo ${state.cycle}</div>
@@ -80,7 +98,7 @@ function openIOSShortcutTimer(seconds){
     "&input=" + encodeURIComponent(String(duration));
   window.location.href = url;
 }
-function renderHome(){const info=weekInfo(), p=PROGRAM[info.week], start=localDate(state.startDate), ws=new Date(start);ws.setDate(start.getDate()+(info.week-1)*7);const we=new Date(ws);we.setDate(ws.getDate()+6);let cards="";for(const d of DAYS){const dt=new Date(ws);dt.setDate(ws.getDate()+(d===1?0:d===2?1:d===4?3:4));const key=p.days[d], id=`${dateISO(dt)}|${info.week}|${key}`, done=!!state.completed[id];cards+=`<div class="card"><div class="row"><div><div class="h2">${LABEL[key]}</div><div class="muted">${DAYNAMES[d]} · ${fmt(dateISO(dt))} · ${d<=2?"Straight":"Cluster"}</div></div><button class="btn small" data-open="${info.week}|${key}|${dateISO(dt)}">${done?"Revisar":"Abrir"}</button></div></div>`;}
+function renderHome(){const info=weekInfo(), p=PROGRAM[info.week], start=localDate(state.startDate), ws=new Date(start);ws.setDate(start.getDate()+(info.week-1)*7);const we=new Date(ws);we.setDate(ws.getDate()+6);let cards="";for(const d of DAYS){const dt=new Date(ws);dt.setDate(ws.getDate()+(d-1));const key=p.days[d], id=`${dateISO(dt)}|${info.week}|${key}`, done=!!state.completed[id];cards+=`<div class="card"><div class="row"><div><div class="h2">${LABEL[key]}</div><div class="muted">${DAYNAMES[d]} · ${fmt(dateISO(dt))} · ${d===6?"Straight":(d<=2?"Straight":"Cluster")}</div></div><button class="btn small" data-open="${info.week}|${key}|${dateISO(dt)}">${done?"Revisar":"Abrir"}</button></div></div>`;}
 const todayKey=workoutForDate(new Date());layout(`<section class="hero"><div class="eyebrow">Ciclo ${state.cycle}</div><div class="h1">Semana ${info.week} — ${p.name}</div><div class="muted">${fmt(dateISO(ws))} → ${fmt(dateISO(we))}</div><p class="muted">${p.note}</p><div class="weekbar">${[0,1,2,3,4,5,6].map(i=>{const d=new Date(ws);d.setDate(ws.getDate()+i);const dow=d.getDay();return `<div class="day ${dateISO(d)===todayISO()?"active":""} ${!p.days[dow]?"rest":""}">${DAYNAMES[dow]}<br>${d.getDate()}</div>`;}).join("")}</div></section><div class="section eyebrow">Treinos da semana</div><div class="grid">${cards}</div>${todayKey?`<div class="section eyebrow">Hoje</div><div class="card"><div class="row"><div><div class="h2">${LABEL[todayKey]}</div><div class="muted">Treino programado para hoje</div></div><div class="row-actions"><button class="btn secondary small" data-overview="${info.week}|${todayKey}|${todayISO()}">📋 Ver treino completo</button><button class="btn small" data-open="${info.week}|${todayKey}|${todayISO()}">Iniciar</button></div></div></div>`:""}`);document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.open.split("|");startWorkout(Number(w),k,d);});
 document.querySelectorAll("[data-overview]").forEach(b=>b.onclick=()=>{const [w,k,d]=b.dataset.overview.split("|");workout={week:Number(w),key:k,date:d,index:0};route="overview";renderOverview();});}
 function startWorkout(week,key,date){workout={week,key,date,index:0};route="overview";renderOverview();bindNav();}
@@ -355,9 +373,6 @@ if(prevBtn)prevBtn.onclick=()=>{workout.index--;renderWorkout();window.scrollTo(
 if(next)next.onclick=()=>{workout.index++;renderWorkout();window.scrollTo({top:0,behavior:"instant"});};
 if(finish)finish.onclick=()=>{
  state.completed[`${workout.date}|${workout.week}|${workout.key}|c${state.cycle}`]=true;
- if(workout.week===7){
-   state.cycleCompleted=true;
- }
  save();go("home");
 };
 bindSetEvents();
@@ -397,7 +412,7 @@ function renderHistory(){
  const cycle=cycles.find(c=>Number(c.id)===cycleId)||cycles[0]||{id:1};
  const selected=state.historyWorkout||"u1";
  const exs=exercisesFor(1,selected);
- const tabs=["u1","u2","l1","l2"].map(k=>`<button class="history-tab ${selected===k?"active":""}" data-history-workout="${k}">${LABEL[k]}</button>`).join("");
+ const tabs=["u1","u2","l1","l2","arms"].map(k=>`<button class="history-tab ${selected===k?"active":""}" data-history-workout="${k}">${LABEL[k]}</button>`).join("");
  const cycleTabs=cycles.map(c=>`<button class="history-cycle ${Number(c.id)===Number(cycle.id)?"active":""}" data-history-cycle="${c.id}">Ciclo ${c.id}</button>`).join("");
  let cards="";
  exs.forEach((e,i)=>{
@@ -412,7 +427,7 @@ function renderHistory(){
  document.querySelectorAll("[data-history-workout]").forEach(b=>b.onclick=()=>{state.historyWorkout=b.dataset.historyWorkout;save();renderHistory();});
  document.querySelectorAll("[data-history-cycle]").forEach(b=>b.onclick=()=>{state.historyCycle=Number(b.dataset.historyCycle);save();renderHistory();});
 }
-function renderSettings(){const info=weekInfo();layout(`<div class="card"><div class="h2">Configurações</div><div class="stack"><div class="field"><label>Início do ciclo</label><input id="start" type="date" class="input" value="${state.startDate}"></div><div class="formgrid"><div class="field"><label>Descanso Straight (s)</label><input id="straight" type="number" class="input" value="${state.restStraight}"></div><div class="field"><label>Entre exercícios (s)</label><input id="between" type="number" class="input" value="${state.restBetweenExercises}"></div></div><div class="field"><label>Cluster entre blocos (s)</label><input id="cluster" type="number" class="input" value="${state.clusterRest}"></div><button class="btn" id="saveSettings">Salvar</button></div></div><div class="card"><div class="h2">Dados locais</div><div class="muted">Os registros desta versão ficam separados dos dados de teste anteriores. Você pode apagar os registros do ciclo atual sem apagar o treino programado.</div><button class="btn secondary" id="clearLogs" style="margin-top:10px">Limpar registros do ciclo</button></div><div class="card"><div class="h2">Ciclo ${state.cycle}</div><div class="muted">${state.cycleCompleted?"Ciclo concluído — pronto para iniciar o próximo.":`Semana atual: ${info.week} — ${PROGRAM[info.week].name}`}</div><button class="btn" id="newCycle" style="margin-top:10px">Iniciar novo ciclo</button></div><div class="card"><div class="h2">Atalho do iOS</div><p class="muted">Crie um Atalho chamado <strong>MR Saizen Timer</strong>. O app <strong>não inicia o descanso automaticamente</strong>; você toca no botão de descanso e ele abre o Atalho, passando a duração em segundos.</p><button class="btn secondary" id="testShortcut">Testar Atalho · 20s</button></div><div class="notice">Os registros ficam salvos localmente neste dispositivo. A progressão de carga é decidida por você.</div>`);document.getElementById("saveSettings").onclick=()=>{state.startDate=document.getElementById("start").value||state.startDate;state.restStraight=Math.max(1,Number(document.getElementById("straight").value)||120);state.restBetweenExercises=Math.max(1,Number(document.getElementById("between").value)||120);state.clusterRest=Math.max(1,Number(document.getElementById("cluster").value)||20);save();go("home");};document.getElementById("clearLogs").onclick=()=>{
+function renderSettings(){const info=weekInfo();layout(`<div class="card"><div class="h2">Configurações</div><div class="stack"><div class="field"><label>Início do ciclo</label><input id="start" type="date" class="input" value="${state.startDate}"></div><div class="formgrid"><div class="field"><label>Descanso Straight (s)</label><input id="straight" type="number" class="input" value="${state.restStraight}"></div><div class="field"><label>Entre exercícios (s)</label><input id="between" type="number" class="input" value="${state.restBetweenExercises}"></div></div><div class="field"><label>Cluster entre blocos (s)</label><input id="cluster" type="number" class="input" value="${state.clusterRest}"></div><button class="btn" id="saveSettings">Salvar</button></div></div><div class="card"><div class="h2">Dados locais</div><div class="muted">Os registros desta versão ficam separados dos dados de teste anteriores. Você pode apagar os registros do ciclo atual sem apagar o treino programado.</div><button class="btn secondary" id="clearLogs" style="margin-top:10px">Limpar registros do ciclo</button></div><div class="card"><div class="h2">Ciclo ${state.cycle}</div><div class="muted">Semana atual: ${info.week} — ${PROGRAM[info.week].name}</div><div class="muted" style="margin-top:8px">Ao terminar a Semana 7, o método volta automaticamente para a Semana 1 no próximo ciclo. Cargas, repetições e observações dos ciclos anteriores permanecem no histórico e são usadas como referência para a próxima sessão.</div><button class="btn secondary" id="newCycle" style="margin-top:10px">Iniciar próximo ciclo agora</button></div><div class="card"><div class="h2">Atalho do iOS</div><p class="muted">Crie um Atalho chamado <strong>MR Saizen Timer</strong>. O app <strong>não inicia o descanso automaticamente</strong>; você toca no botão de descanso e ele abre o Atalho, passando a duração em segundos.</p><button class="btn secondary" id="testShortcut">Testar Atalho · 20s</button></div><div class="notice">Os registros ficam salvos localmente neste dispositivo. A progressão de carga é decidida por você.</div>`);document.getElementById("saveSettings").onclick=()=>{state.startDate=document.getElementById("start").value||state.startDate;state.restStraight=Math.max(1,Number(document.getElementById("straight").value)||120);state.restBetweenExercises=Math.max(1,Number(document.getElementById("between").value)||120);state.clusterRest=Math.max(1,Number(document.getElementById("cluster").value)||20);save();go("home");};document.getElementById("clearLogs").onclick=()=>{
  if(confirm("Apagar cargas, reps, observações e registros deste ciclo? O treino programado não será apagado.")){
    state.logs={};state.notes={};state.completed={};save();go("home");
  }

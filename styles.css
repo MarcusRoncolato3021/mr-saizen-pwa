@@ -836,3 +836,9 @@ body.workout-page .wrap{padding-bottom:calc(145px + var(--safe-bottom)) !importa
 
 /* v29 — 2:00 rest after every work set; only the final work set advances */
 .timer-btn{width:100%;margin-top:7px}
+
+/* v30 — global bottom navigation: one delegated handler works after every render */
+.nav{position:fixed !important;z-index:99999 !important;pointer-events:auto !important;touch-action:manipulation !important}
+.navin,.nav button{pointer-events:auto !important;touch-action:manipulation !important}
+body.workout-page .nav{display:block !important;pointer-events:auto !important}
+body.workout-page .wrap{padding-bottom:calc(150px + var(--safe-bottom)) !important}
