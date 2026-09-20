@@ -3,6 +3,18 @@
 const PROGRAM={"1":{"name":"Base","note":"Entrada controlada, menor fadiga global.","days":{"1":"u1","2":"l1","4":"u2","5":"l2","6":"arms"}},"2":{"name":"Build 1","note":"Primeiro aumento concentrado nos grupos de maior prioridade.","days":{"1":"u2","2":"l2","4":"u1","5":"l1","6":"arms"}},"3":{"name":"Build 2","note":"Costas chegam antes ao teto por prioridade e frequência nos uppers.","days":{"1":"u1","2":"l1","4":"u2","5":"l2","6":"arms"}},"4":{"name":"Overload 1","note":"Grupos Tier III chegam ao teto; Tier I permanece controlado.","days":{"1":"u2","2":"l2","4":"u1","5":"l1","6":"arms"}},"5":{"name":"Overload 2","note":"Mantém teto dos grupos prioritários sem exceder tiers máximos.","days":{"1":"u1","2":"l1","4":"u2","5":"l2","6":"arms"}},"6":{"name":"Peak Week","note":"Maior exigência geral da periodização, sem exceder o tier máximo.","days":{"1":"u2","2":"l2","4":"u1","5":"l1","6":"arms"}},"7":{"name":"Deload de Volume","note":"Redução clara de volume, mantendo estrutura e exercícios principais.","days":{"1":"u1","2":"l1","4":"u2","5":"l2","6":"arms"}}};
 const BASE={"u1":[["Pulldown Aberto Pronado","4–6"],["Remada Articulada Sagital","4–6"],["T-Bar com Apoio","4–6"],["Desenvolvimento Máquina","4–6"],["Elevação Lateral Máquina","5–9"],["Supino Pegada Neutra","4–6"],["Voador Máquina","5–9"],["Rosca Inclinado 45°","5–9"]],"u2":[["Remada Articulada Sagital","4–6"],["Remada Curvada","4–6"],["Desenvolvimento Máquina","4–6"],["Elevação Lateral Máquina","5–9"],["Pullover com Halter","4–6"],["Press Transversal","4–6"],["Voador Máquina","5–9"],["Rosca Scott","5–9"]],"l1":[["Cadeira Abdutora","5–9"],["Glute Bridge","4–6"],["Leg Press 45","4–6"],["Cadeira Flexora","5–9"],["Mesa Flexora","5–9"],["Panturrilha em Pé","5–9"],["Leg Unilateral","4–6"],["Cadeira Extensora — pico na fase alongada","5–9"],["Tríceps Unilateral no Cabo","5–9"]],"l2":[["Rack Pull","4–6"],["Cadeira Flexora","5–9"],["Mesa Flexora","5–9"],["Cadeira Abdutora","5–9"],["Elevação Pélvica","4–6"],["Panturrilha em Pé","5–9"],["Split Squat no Smith","4–6"],["Cadeira Extensora — pico na fase contraída","5–9"],["Pullover com Halter","4–6"]],"arms":[["Supino para Tríceps","4–6"],["Francês no Cabo","4–6"],["Tríceps Testa no Cabo","4–6"],["Rosca Concentrado","4–6"],["Rosca Bayesiana","4–6"],["Rosca Martelo","4–6"]]};
 const CLUSTER={"u1":[1,1,1,1,1,1,1,1],"u2":[1,0,1,1,0,1,1,1],"l1":[1,0,1,1,1,1,0,1,0],"l2":[0,1,1,1,0,1,0,1,0]};
+// Método conferido exercício por exercício com a periodização original (7 semanas).
+// Não derivar o método apenas pelo dia: isso evita que a semana selecionada mostre
+// Cluster/Straight incorretamente. Braços de sábado é sempre Straight.
+const METHODS={
+  "1":{"u1":"SSSSSSSS","l1":"SSSSSSSSS","u2":"CSCCSCCC","l2":"SCCCSCSCS","arms":"SSSSSS"},
+  "2":{"u2":"SSSSSSSS","l2":"SSSSSSSSS","u1":"CCCCCCCC","l1":"CSCCCCSCS","arms":"SSSSSS"},
+  "3":{"u1":"SSSSSSSS","l1":"SSSSSSSSS","u2":"CSCCSCCC","l2":"SCCCSCSCS","arms":"SSSSSS"},
+  "4":{"u2":"SSSSSSSS","l2":"SSSSSSSSS","u1":"CCCCCCCC","l1":"CSCCCCSCS","arms":"SSSSSS"},
+  "5":{"u1":"SSSSSSSS","l1":"SSSSSSSSS","u2":"CSCCSCCC","l2":"SCCCSCSCS","arms":"SSSSSS"},
+  "6":{"u2":"SSSSSSSS","l2":"SSSSSSSSS","u1":"CCCCCCCC","l1":"CSCCCCSCS","arms":"SSSSSS"},
+  "7":{"u1":"SSSSSSSS","l1":"SSSSSSSSS","u2":"CSCCSCCC","l2":"SCCCSCSCS","arms":"SSSSSS"}
+};
 const SETS={"1":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,1,1,1,1,1,1,1,1],"u2":[1,1,1,1,1,1,1,1],"l2":[1,1,1,1,1,1,1,1,1],"arms":[1,1,1,1,1,1]},"2":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,1,1,1,1,1,1,1],"l2":[1,1,1,1,2,1,1,1,1],"arms":[1,1,1,1,1,1]},"3":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[1,1,1,1,2,1,1,1,2],"arms":[1,1,1,1,1,1]},"4":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[2,1,1,1,2,1,1,1,2],"arms":[1,1,1,1,1,1]},"5":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[2,1,1,1,2,1,1,1,2],"arms":[1,1,1,1,1,1]},"6":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,2,1,1,1,1,1,1,1],"u2":[1,2,1,1,2,1,1,1],"l2":[2,1,1,1,2,1,1,1,2],"arms":[1,1,1,1,1,1]},"7":{"u1":[1,1,1,1,1,1,1,1],"l1":[1,1,1,1,1,1,1,1,1],"u2":[1,1,1,1,1,1,1,1],"l2":[1,1,1,1,1,1,1,1,1],"arms":[1,1,1,1,1,1]}};
 const DAYS=[1,2,4,5,6];
 const DAYNAMES={0:"Dom",1:"Seg",2:"Ter",3:"Qua",4:"Qui",5:"Sex",6:"Sáb"};
@@ -49,8 +61,29 @@ function fmt(s){return localDate(s).toLocaleDateString("pt-BR",{day:"2-digit",mo
 function todayISO(){return dateISO(new Date());}
 function weekInfo(date=new Date()){const start=localDate(state.startDate), d=new Date(date.getFullYear(),date.getMonth(),date.getDate()), diff=Math.floor((d-start)/86400000);return {week:Math.max(1,Math.min(7,Math.floor(diff/7)+1)),diff};}
 function workoutForDate(date=new Date()){const w=weekInfo(date).week;return PROGRAM[w].days[date.getDay()]||null;}
-function workoutMethod(week,key,i){const day=Object.keys(PROGRAM[week].days).find(d=>PROGRAM[week].days[d]===key);return (day==="4"||day==="5")&&CLUSTER[key][i]===1?"cluster":"straight";}
-function exercisesFor(week,key){return BASE[key].map((x,i)=>({name:state.edits?.[week]?.[key]?.[i]?.name||x[0],range:x[1],method:workoutMethod(week,key,i),sets:SETS[week][key][i]}));}
+function workoutMethod(week,key,i){
+  const code=METHODS?.[String(week)]?.[key]?.[i];
+  if(code!=="C" && code!=="S") throw new Error(`Método não definido: semana ${week} ${key} exercício ${i+1}`);
+  return code==="C"?"cluster":"straight";
+}
+function exercisesFor(week,key){return BASE[key].map((x,i)=>({name:state.edits?.[week]?.[key]?.[i]?.name||x[0],range:x[1],method:workoutMethod(week,key,i),sets:SETS[week][key][i]}));}function validatePeriodization(){
+  const expectedLengths={u1:8,u2:8,l1:9,l2:9,arms:6};
+  // Semana 7 é Deload de Volume: Upper 1 e Lower 1 são 100% STRAIGHT.
+  const week7Straight={u1:"SSSSSSSS",l1:"SSSSSSSSS",arms:"SSSSSS"};
+  for(const [key,code] of Object.entries(week7Straight)){
+    if(METHODS["7"][key]!==code) throw new Error(`Semana 7 inválida: ${key}`);
+  }
+  for(const w of Object.keys(METHODS)){
+    for(const key of Object.keys(expectedLengths)){
+      const code=METHODS[w][key]||"";
+      if(code.length!==expectedLengths[key]) throw new Error(`Método inválido: semana ${w} ${key}`);
+    }
+  }
+  // Regra fixa do treino extra: sábado é sempre 1 straight set por exercício.
+  for(let w=1;w<=7;w++) if(SETS[w].arms.some(n=>n!==1)||METHODS[w].arms!=="SSSSSS") throw new Error(`Braços inválido na semana ${w}`);
+}
+validatePeriodization();
+
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function pill(m){return `<span class="pill ${m}">${m==="cluster"?"CLUSTER":"STRAIGHT"}</span>`;}
 function layout(content){
