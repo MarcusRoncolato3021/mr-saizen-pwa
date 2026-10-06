@@ -852,3 +852,28 @@ body.workout-page .wrap{padding-bottom:calc(150px + var(--safe-bottom)) !importa
 .week-navigation{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0 18px}.week-navigation-title{font-size:12px;color:#8f8f9b;font-weight:700;white-space:nowrap}.week-navigation .btn{min-width:0}
 @media(max-width:500px){.weekbar{gap:4px}.week-switch{min-height:54px;border-radius:10px}.week-switch span{font-size:7px}.week-switch b{font-size:16px}.week-switch small{font-size:6px}.week-navigation .btn{font-size:11px;padding:9px 8px}.week-navigation-title{font-size:11px}}
 @media(max-width:360px){.week-switch{padding-left:1px;padding-right:1px}.week-switch b{font-size:15px}.week-navigation{gap:4px}.week-navigation .btn{font-size:10px;padding:8px 6px}}
+
+/* v44 — navegação global robusta em todas as telas */
+.nav{
+  position:fixed !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  z-index:2147483647 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  transform:translateZ(0) !important;
+}
+.navin,.nav button{
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-tap-highlight-color:transparent;
+}
+body.workout-page .nav,
+body.workout-page .navin,
+body.workout-page .nav button{
+  pointer-events:auto !important;
+}
+body.workout-page .wrap{
+  padding-bottom:calc(150px + var(--safe-bottom)) !important;
+}
