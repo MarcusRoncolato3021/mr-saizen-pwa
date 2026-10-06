@@ -1,5 +1,5 @@
 const CACHE="mr-saizen-v44";
-const VERSION="43";
+const VERSION="44";
 const ASSETS=["./?v=44","./index.html?v=44","./app-v44.js?v=44","./styles.css?v=44","./manifest.webmanifest?v=44","./icon.svg?v=44"];
 self.addEventListener("install",e=>e.waitUntil((async()=>{const c=await caches.open(CACHE);await Promise.all(ASSETS.map(async u=>{const r=await fetch(u,{cache:"no-store"});if(!r.ok)throw new Error("asset "+u);await c.put(u,r);}));await self.skipWaiting();})()));
 self.addEventListener("activate",e=>e.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)));await self.clients.claim();})()));
