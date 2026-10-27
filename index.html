@@ -1,3 +1,34 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0d0d12"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="MR Saizen"><link rel="manifest" href="manifest.webmanifest?v=44"><link rel="icon" href="icon.svg?v=44" type="image/svg+xml"><link rel="apple-touch-icon" href="icon.svg?v=44"><link rel="stylesheet" href="styles.css?v=44"><title>MR Saizen Method v44</title></head><body><div id="app"><div class="boot">Atualizando MR Saizen…</div></div><script>
-(async()=>{if(!('serviceWorker' in navigator))return;try{const regs=await navigator.serviceWorker.getRegistrations();for(const r of regs){if(!r.scriptURL.includes('/sw-v44.js'))await r.unregister();}await navigator.serviceWorker.register('./sw-v44.js?v=44',{updateViaCache:'none'});}catch(e){console.warn('SW v44',e);}})();
-</script><script src="app-v44.js?v=44"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d0d12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MR Saizen">
+<link rel="manifest" href="manifest.webmanifest?v=47">
+<link rel="icon" href="icon.svg?v=47" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=47">
+<link rel="stylesheet" href="styles.css?v=47">
+<title>MR Saizen Method</title>
+</head>
+<body>
+<div id="app"><div class="boot">Atualizando MR Saizen…</div></div>
+<script>
+// Remove service workers de versões antigas e registra o atual.
+(async()=>{
+  if(!('serviceWorker' in navigator))return;
+  try{
+    for(const r of await navigator.serviceWorker.getRegistrations()){
+      const url=(r.active||r.waiting||r.installing||{}).scriptURL||'';
+      if(!url.includes('/sw-v47.js'))await r.unregister();
+    }
+    await navigator.serviceWorker.register('./sw-v47.js?v=47',{updateViaCache:'none'});
+  }catch(e){console.warn('SW v47',e);}
+})();
+</script>
+<script src="app-v47.js?v=47"></script>
+</body>
+</html>

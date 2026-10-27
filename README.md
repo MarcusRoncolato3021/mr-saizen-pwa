@@ -1,18 +1,19 @@
-MR Saizen Method — v41
+MR Saizen Method — v47
 
-Esta versão força uma atualização real do PWA.
-
-1. Substitua os arquivos da raiz do repositório pelos arquivos deste ZIP.
+Como atualizar
+1. Substitua TODOS os arquivos da raiz do repositório pelos deste ZIP
+   (apague app-v44/45/46.js e sw-v44/45/46.js — foram substituídos por app-v47.js e sw-v47.js).
 2. Faça commit/push e aguarde o deploy da Vercel.
 3. Abra a URL do site no Safari pelo menos uma vez.
 4. Feche e reabra o PWA.
-5. A tela inicial deve mostrar “Ciclo X · v41”.
+5. A tela inicial deve mostrar "Ciclo X · v47".
 
-A Semana 7 é explicitamente:
-- Upper 1: todos Straight
-- Lower 1: todos Straight
-- Braços: todos Straight
+Seus registros continuam salvos: a chave de armazenamento não mudou.
+
+Periodização (inalterada)
+Semana 7 (Deload de Volume):
+- Upper 1, Lower 1 e Braços: todos Straight
 - Upper 2: CSCCSCCC
 - Lower 2: SCCCSCSCS
 
-A lógica de método da Semana 7 para Upper 1/Lower 1/Braços é forçada diretamente no código, independentemente de qualquer estado salvo.
+O que mudou na v47 — veja MUDANCAS.md.
